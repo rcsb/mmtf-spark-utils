@@ -33,7 +33,7 @@ public class SparkRead implements Serializable {
 	//	private static final Logger logger = LoggerFactory.getLogger(SparkRead.class);
 	public static void main(String[] args )
 	{
-		String path = "Total.hadoop.nocodec";
+		String path = "Total.hadoop.latest.bzip2";
 		// This is the default 2 line structure for Spark applications
 		SparkConf conf = new SparkConf().setMaster("local[" + NUM_THREADS + "]")
 				.setAppName(SparkRead.class.getSimpleName());
