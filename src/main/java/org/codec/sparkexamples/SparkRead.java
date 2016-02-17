@@ -1,10 +1,8 @@
 package org.codec.sparkexamples;
 
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
+
 import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import org.apache.hadoop.io.BytesWritable;
@@ -33,7 +31,7 @@ public class SparkRead implements Serializable {
 	private static int NUM_THREADS = 4;
 	private static int NUM_TASKS_PER_THREAD = 3; // Spark recommends 2-3 tasks per thread
 	//	private static final Logger logger = LoggerFactory.getLogger(SparkRead.class);
-	public static void main(String[] args ) throws UnsupportedEncodingException, FileNotFoundException, IOException
+	public static void main(String[] args )
 	{
 		String path = "Total.hadoop.nocodec";
 		// This is the default 2 line structure for Spark applications

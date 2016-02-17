@@ -19,17 +19,20 @@ public class GetPDBGroups implements PairFlatMapFunction<Tuple2<String,Structure
 
 	@Override
 	public Iterable<Tuple2<String, Group>> call(Tuple2<String, Structure> t) throws Exception {
-		// TODO Auto-generated method stub
+		// The list to return
 		List<Tuple2<String, Group>> outList = new ArrayList<Tuple2<String, Group>>();
-
-		for(Chain c:  t._2.getChains()){
-			for(Group g: c.getAtomGroups()){
-				// Now make this group
-				outList.add(new Tuple2<String, Group>(t._2.getPDBCode()+"."+g.getResidueNumber(), g));
+		for(int modelNr=0;  modelNr<t._2.nrModels(); modelNr++){
+			// Function to get all the fragments - and return in a tuple
+			for(Chain c: t._2.getChains(modelNr)){
+				List<Group> myGroups = c.getAtomGroups();
+				// Now loop through these groups and add them to the outputlist
+				for(Group g: myGroups){
+					// Now generate the unique id
+					String uniqId = modelNr+"_"+c.getChainID()+"_"+g.getResidueNumber();
+					outList.add(new Tuple2<String, Group>(uniqId, g));
+				}
 			}
 		}
 		return outList;
-	} 
-
-
+	}
 }

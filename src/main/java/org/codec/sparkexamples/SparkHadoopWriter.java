@@ -1,8 +1,6 @@
 package org.codec.sparkexamples;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -30,7 +28,7 @@ import org.codec.mappers.StringByteToTextByteWriter;
 public class SparkHadoopWriter {
 
 	private static int NUM_THREADS = 4;
-	public static void main(String[] args ) throws UnsupportedEncodingException, FileNotFoundException, IOException
+	public static void main(String[] args )
 	{
 
 		// This is the default 2 line structure for Spark applications

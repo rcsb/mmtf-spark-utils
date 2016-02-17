@@ -41,7 +41,6 @@ public class GetAllFragments implements PairFlatMapFunction<Tuple2<String,Struct
 				}
 			}
 		}
-
 		return outList;
 	}
 

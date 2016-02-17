@@ -56,9 +56,11 @@ public class SparkSDSCHadoopWriter {
 		cache.setFileParsingParams(params);
 		StructureIO.setAtomCache(cache);
 
-		// Get all the PDB IDs
-		SortedSet<String> thisSet = GetRepresentatives.getAll();
-		List<String> pdbCodeList = new ArrayList<String>(thisSet);
+//		// Get all the PDB IDs
+//		SortedSet<String> thisSet = GetRepresentatives.getAll();
+//		List<String> pdbCodeList = new ArrayList<String>(thisSet);
+		List<String> pdbCodeList = new ArrayList<String>();
+		pdbCodeList.add("1aq0");
 		// Now read this list in
 		JavaPairRDD<Text, BytesWritable> distData =
 				sc.parallelize(pdbCodeList)

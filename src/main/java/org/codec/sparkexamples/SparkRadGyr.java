@@ -1,10 +1,7 @@
 package org.codec.sparkexamples;
 
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 
@@ -33,7 +30,7 @@ public class SparkRadGyr implements Serializable {
 	private static int NUM_THREADS = 4;
 	private static int NUM_TASKS_PER_THREAD = 3; // Spark recommends 2-3 tasks per thread
 	//	private static final Logger logger = LoggerFactory.getLogger(SparkRead.class);
-	public static void main(String[] args ) throws UnsupportedEncodingException, FileNotFoundException, IOException
+	public static void main(String[] args ) 
 	{
 		String path = "totFileTestSmall.hadoop";
 		// This is the default 2 line structure for Spark applications
