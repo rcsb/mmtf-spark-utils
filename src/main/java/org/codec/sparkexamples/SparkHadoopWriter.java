@@ -19,8 +19,8 @@ import org.biojava.nbio.structure.io.LocalPDBDirectory.FetchBehavior;
 import org.biojava.nbio.structure.io.mmcif.ChemCompGroupFactory;
 import org.biojava.nbio.structure.io.mmcif.DownloadChemCompProvider;
 import org.biojava.nbio.structure.rcsb.GetRepresentatives;
-import org.codec.mappers.FlatMapToBytes;
-import org.codec.mappers.PDBCodeToCBSMapper;
+import org.codec.mappers.CBSToBytes;
+import org.codec.mappers.PDBCodeToCBS;
 import org.codec.mappers.StringByteToTextByteWriter;
 
 
@@ -59,8 +59,8 @@ public class SparkHadoopWriter {
 		List<String> pdbCodeList = thisList.subList(0, maxStructs);	
 		JavaPairRDD<Text, BytesWritable> distData =
 				sc.parallelize(pdbCodeList)
-				.mapToPair(new PDBCodeToCBSMapper())
-				.flatMapToPair(new FlatMapToBytes())
+				.mapToPair(new PDBCodeToCBS())
+				.flatMapToPair(new CBSToBytes())
 				.mapToPair(new StringByteToTextByteWriter());
 
 		// Now save this as a Hadoop sequence file

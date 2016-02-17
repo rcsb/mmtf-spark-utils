@@ -2,7 +2,6 @@ package org.codec.mappers;
 
 import org.apache.spark.api.java.function.PairFunction;
 import org.biojava.nbio.structure.Structure;
-import org.biojava.nbio.structure.StructureImpl;
 import org.codec.decoder.BioJavaStructureInflator;
 import org.codec.decoder.DecodeStructure;
 import scala.Tuple2;

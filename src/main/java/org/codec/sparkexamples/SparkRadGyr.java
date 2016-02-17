@@ -14,7 +14,7 @@ import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.codec.mappers.ByteArrayToBioJavaStructMapper;
 import org.codec.mappers.ByteWriteToByteArr;
-import org.codec.mappers.GetBioAssemblies;
+import org.codec.mappers.StructureToBioAssemblies;
 import org.codec.proccessors.RadiusOfGyrationMapper;
 
 /**
@@ -45,7 +45,7 @@ public class SparkRadGyr implements Serializable {
 				// Now get the structure
 				.mapToPair(new ByteWriteToByteArr())
 				.mapToPair(new ByteArrayToBioJavaStructMapper())
-				.flatMapToPair(new GetBioAssemblies())
+				.flatMapToPair(new StructureToBioAssemblies())
 				.mapToPair(new RadiusOfGyrationMapper());
 		// Now collect the results
 		JavaRDD<Float> values = jprdd.values();
