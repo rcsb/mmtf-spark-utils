@@ -28,7 +28,7 @@ public class ByteArrayToBioJavaStructMapper implements PairFunction<Tuple2<Strin
 		ds.getStructFromByteArray(t._2, bjs);
 		}
 		catch(Exception e){
-			System.out.println(e);
+			System.out.println(t._1);
 			Structure newStruct = new StructureImpl();
 			return new Tuple2<String, Structure>(t._1, newStruct);
 
