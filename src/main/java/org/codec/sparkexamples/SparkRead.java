@@ -39,11 +39,6 @@ public class SparkRead implements Serializable {
 				.setAppName(SparkRead.class.getSimpleName());
 		// Set the config
 		JavaSparkContext sc = new JavaSparkContext(conf);
-		// Set the downloader - to download the CIF files
-		DownloadChemCompProvider thisProvider = new DownloadChemCompProvider();
-		thisProvider.setDownloadAll(true);
-		ChemCompGroupFactory.setChemCompProvider(thisProvider);
-		thisProvider.checkDoFirstInstall();
 		JavaPairRDD<String, Structure> jprdd = sc
 				.sequenceFile(path, Text.class, BytesWritable.class, NUM_THREADS * NUM_TASKS_PER_THREAD)
 				.mapToPair(new ByteWriteToByteArr())
