@@ -24,15 +24,7 @@ public class ByteArrayToBioJavaStructMapper implements PairFunction<Tuple2<Strin
 	public Tuple2<String, Structure> call(Tuple2<String, byte[]> t) throws Exception {
 		DecodeStructure ds = new DecodeStructure();
 		BioJavaStructureInflator bjs = new BioJavaStructureInflator();
-		try{
 		ds.getStructFromByteArray(t._2, bjs);
-		}
-		catch(Exception e){
-			System.out.println(t._1);
-			Structure newStruct = new StructureImpl();
-			return new Tuple2<String, Structure>(t._1, newStruct);
-
-		}
 		Structure newStruct = bjs.getStructure();
 		newStruct.setPDBCode(t._1.substring(0,4));
 		return new Tuple2<String, Structure>(t._1, newStruct);
