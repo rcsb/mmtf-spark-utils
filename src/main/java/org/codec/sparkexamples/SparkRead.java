@@ -11,11 +11,14 @@ import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
+import org.apache.spark.api.java.function.Function;
 import org.biojava.nbio.structure.Structure;
 import org.biojava.nbio.structure.io.mmcif.ChemCompGroupFactory;
 import org.biojava.nbio.structure.io.mmcif.DownloadChemCompProvider;
 import org.codec.mappers.ByteArrayToBioJavaStructMapper;
 import org.codec.mappers.ByteWriteToByteArr;
+
+import scala.Tuple2;
 
 
 /**
@@ -42,6 +45,20 @@ public class SparkRead implements Serializable {
 		JavaPairRDD<String, Structure> jprdd = sc
 				.sequenceFile(path, Text.class, BytesWritable.class, NUM_THREADS * NUM_TASKS_PER_THREAD)
 				.mapToPair(new ByteWriteToByteArr())
+				.filter(new Function<Tuple2<String,byte[]>, Boolean>() {
+					
+					@Override
+					public Boolean call(Tuple2<String, byte[]> v1) throws Exception {
+						// TODO Auto-generated method stub
+						if(v1._1.endsWith("_total")){
+
+						return true;
+						}
+						else{
+							return false;
+						}
+					}
+				})
 				// Now get the structure
 				.mapToPair(new ByteArrayToBioJavaStructMapper());
 		JavaRDD<String> values = jprdd.keys();
