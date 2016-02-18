@@ -29,7 +29,7 @@ public class SparkRead implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 3037567648753603114L;
-	private static int NUM_THREADS = 4;
+	private static int NUM_THREADS = 24;
 	private static int NUM_TASKS_PER_THREAD = 3; // Spark recommends 2-3 tasks per thread
 	//	private static final Logger logger = LoggerFactory.getLogger(SparkRead.class);
 	public static void main(String[] args )
