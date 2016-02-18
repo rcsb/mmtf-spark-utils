@@ -26,6 +26,7 @@ public class PDBCodeToCBS implements PairFunction<String, String, CreateBasicStr
 		catch(Exception e){
 			// Just return the object
 			System.out.println(e+"  ::  "+t);
+			System.out.println(e.getMessage());
 			return new Tuple2<String, CreateBasicStructure>(t,cbs);
 		}
 		// If it doesn't fail also return the object
