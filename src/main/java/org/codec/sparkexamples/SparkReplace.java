@@ -83,7 +83,6 @@ public class SparkReplace {
 		.mapToPair(new PDBCodeToCBS())
 		.flatMapToPair(new CBSToBytes())
 		.mapToPair(new StringByteToTextByteWriter()).collect();
-		sc.close();
 		
 		return distData;
 	}
