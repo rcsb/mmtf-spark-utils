@@ -82,8 +82,7 @@ public class PredictQuatStructures implements PairFunction<Tuple2<String, Struct
 		}
 	}
 
-
-
+	
 	private boolean isLowSymmetry(QuatSymmetryResults results) {
 		return getMinFold(results.getSubunits()) > 1 && results.getRotationGroup() != null && results.getRotationGroup().getPointGroup().equals("C1");
 	}

@@ -23,8 +23,6 @@ import org.biojava.nbio.structure.rcsb.GetRepresentatives;
 import org.codec.dataholders.CreateBasicStructure;
 import org.codec.dataholders.PDBGroup;
 
-
-
 public class SparkSDSCTester {
 
 	private static int NUM_THREADS = 24;

@@ -13,8 +13,6 @@ import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.Function;
 import org.biojava.nbio.structure.Structure;
-import org.biojava.nbio.structure.io.mmcif.ChemCompGroupFactory;
-import org.biojava.nbio.structure.io.mmcif.DownloadChemCompProvider;
 import org.codec.mappers.ByteArrayToBioJavaStructMapper;
 import org.codec.mappers.ByteWriteToByteArr;
 
@@ -47,6 +45,11 @@ public class SparkRead implements Serializable {
 				.mapToPair(new ByteWriteToByteArr())
 				.filter(new Function<Tuple2<String,byte[]>, Boolean>() {
 					
+					/**
+					 * 
+					 */
+					private static final long serialVersionUID = -4931703036945548441L;
+
 					@Override
 					public Boolean call(Tuple2<String, byte[]> v1) throws Exception {
 						// TODO Auto-generated method stub
