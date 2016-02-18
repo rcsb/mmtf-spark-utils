@@ -9,7 +9,6 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapred.SequenceFileOutputFormat;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
-import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.biojava.nbio.structure.StructureIO;
 import org.biojava.nbio.structure.align.util.AtomCache;
@@ -52,19 +51,13 @@ public class SparkReplace {
 		newList.add("3NAO");
 		newList.add("4XNO");
 		newList.add("4YAZ");
-		List<Tuple2<Text, BytesWritable>> newData = sr.getNew(newList);
+		List<Tuple2<Text, BytesWritable>> newData = sr.getNew(newList, sc);
 		JavaPairRDD<Text, BytesWritable> me = sc.parallelizePairs(newData);
 		origData.join(me);
 		origData.saveAsHadoopFile("NEWDATA", Text.class, BytesWritable.class, SequenceFileOutputFormat.class, org.apache.hadoop.io.compress.BZip2Codec.class);
 	}
 
-	private List<Tuple2<Text, BytesWritable>> getNew(List<String> newList){
-
-		// This is the default 2 line structure for Spark applications
-		SparkConf conf = new SparkConf().setMaster("local[" + NUM_THREADS + "]")
-				.setAppName(SparkRead.class.getSimpleName());
-		// Set the config
-		JavaSparkContext sc = new JavaSparkContext(conf);
+	private List<Tuple2<Text, BytesWritable>> getNew(List<String> newList,JavaSparkContext sc){
 
 		// A hack to make sure we're not downloading the whole pdb
 		Properties sysProps = System.getProperties();
