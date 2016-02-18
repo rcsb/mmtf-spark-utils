@@ -51,13 +51,13 @@ public class SparkReplace {
 		newList.add("3NAO");
 		newList.add("4XNO");
 		newList.add("4YAZ");
-		List<Tuple2<Text, BytesWritable>> newData = sr.getNew(newList, sc);
-		JavaPairRDD<Text, BytesWritable> me = sc.parallelizePairs(newData);
-		origData.join(me);
+		List<Tuple2<String, byte[]>> newData = sr.getNew(newList, sc);
+		 JavaPairRDD<String, byte[]> me = sc.parallelizePairs(newData);
+		origData.join(me.mapToPair(new StringByteToTextByteWriter()));
 		origData.saveAsHadoopFile("NEWDATA", Text.class, BytesWritable.class, SequenceFileOutputFormat.class, org.apache.hadoop.io.compress.BZip2Codec.class);
 	}
 
-	private List<Tuple2<Text, BytesWritable>> getNew(List<String> newList,JavaSparkContext sc){
+	private List<Tuple2<String, byte[]>> getNew(List<String> newList,JavaSparkContext sc){
 
 		// A hack to make sure we're not downloading the whole pdb
 		Properties sysProps = System.getProperties();
@@ -79,11 +79,9 @@ public class SparkReplace {
 		StructureIO.setAtomCache(cache);
 		// Get all the PDB IDs
 		// Now read this list in
-		 List<Tuple2<Text, BytesWritable>> distData = sc.parallelize(newList)
+		List<Tuple2<String, byte[]>> distData = sc.parallelize(newList)
 		.mapToPair(new PDBCodeToCBS())
-		.flatMapToPair(new CBSToBytes())
-		.mapToPair(new StringByteToTextByteWriter()).collect();
-		
+		.flatMapToPair(new CBSToBytes()).collect()		
 		return distData;
 	}
 	
