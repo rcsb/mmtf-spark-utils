@@ -55,6 +55,9 @@ public class SparkReplace {
 		 JavaPairRDD<String, byte[]> me = sc.parallelizePairs(newData);
 		origData.join(me.mapToPair(new StringByteToTextByteWriter()));
 		origData.saveAsHadoopFile("NEWDATA", Text.class, BytesWritable.class, SequenceFileOutputFormat.class, org.apache.hadoop.io.compress.BZip2Codec.class);
+		
+		sc.stop();
+		sc.close();
 	}
 
 	private List<Tuple2<String, byte[]>> getNew(List<String> newList,JavaSparkContext sc){
