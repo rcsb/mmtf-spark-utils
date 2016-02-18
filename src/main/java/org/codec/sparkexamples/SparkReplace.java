@@ -81,7 +81,7 @@ public class SparkReplace {
 		// Now read this list in
 		List<Tuple2<String, byte[]>> distData = sc.parallelize(newList)
 		.mapToPair(new PDBCodeToCBS())
-		.flatMapToPair(new CBSToBytes()).collect()		
+		.flatMapToPair(new CBSToBytes()).collect();		
 		return distData;
 	}
 	
