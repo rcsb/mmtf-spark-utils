@@ -79,7 +79,6 @@ public class SparkReplace {
 				.mapToPair(new StringByteToTextByteWriter());
 
 		
-		sc.close();
 		return distData;
 	}
 	
@@ -97,7 +96,6 @@ public class SparkReplace {
 		JavaSparkContext sc = new JavaSparkContext(conf);
 		JavaPairRDD<Text, BytesWritable> jprdd = sc
 				.sequenceFile(path, Text.class, BytesWritable.class, NUM_THREADS * NUM_TASKS_PER_THREAD);
-		sc.close();
 		return jprdd;
 	}
 }
