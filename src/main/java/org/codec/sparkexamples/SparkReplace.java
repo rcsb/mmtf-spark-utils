@@ -9,6 +9,7 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapred.SequenceFileOutputFormat;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
+import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.biojava.nbio.structure.StructureIO;
 import org.biojava.nbio.structure.align.util.AtomCache;
@@ -20,6 +21,8 @@ import org.codec.mappers.CBSToBytes;
 import org.codec.mappers.PDBCodeToCBS;
 import org.codec.mappers.StringByteToTextByteWriter;
 
+import scala.Tuple2;
+
 public class SparkReplace {
 
 	private static final int NUM_THREADS = 24;
@@ -28,6 +31,17 @@ public class SparkReplace {
 
 	public static void main(String[] args )
 	{
+
+		String path = "Total.hadoop.latest.bzip2";
+		// This is the default 2 line structure for Spark applications
+		SparkConf conf = new SparkConf().setMaster("local[" + NUM_THREADS + "]")
+				.setAppName(SparkRead.class.getSimpleName());
+		// Set the config
+		JavaSparkContext sc = new JavaSparkContext(conf);
+		JavaPairRDD<Text, BytesWritable> origData = sc
+				.sequenceFile(path, Text.class, BytesWritable.class, NUM_THREADS * NUM_TASKS_PER_THREAD);
+
+		
 		SparkReplace sr = new SparkReplace();
 		List<String> newList = new ArrayList<String>();
 		newList.add("2KPR");
@@ -38,13 +52,13 @@ public class SparkReplace {
 		newList.add("3NAO");
 		newList.add("4XNO");
 		newList.add("4YAZ");
-		JavaPairRDD<Text, BytesWritable> newData = sr.getNew(newList);
-		JavaPairRDD<Text, BytesWritable> origData = sr.getOrig();
-		origData.join(newData);
+		List<Tuple2<Text, BytesWritable>> newData = sr.getNew(newList);
+		JavaPairRDD<Text, BytesWritable> me = sc.parallelizePairs(newData);
+		origData.join(me);
 		origData.saveAsHadoopFile("NEWDATA", Text.class, BytesWritable.class, SequenceFileOutputFormat.class, org.apache.hadoop.io.compress.BZip2Codec.class);
 	}
 
-	private JavaPairRDD<Text, BytesWritable> getNew(List<String> newList){
+	private List<Tuple2<Text, BytesWritable>> getNew(List<String> newList){
 
 		// This is the default 2 line structure for Spark applications
 		SparkConf conf = new SparkConf().setMaster("local[" + NUM_THREADS + "]")
@@ -72,30 +86,13 @@ public class SparkReplace {
 		StructureIO.setAtomCache(cache);
 		// Get all the PDB IDs
 		// Now read this list in
-		JavaPairRDD<Text, BytesWritable> distData =
-				sc.parallelize(newList)
-				.mapToPair(new PDBCodeToCBS())
-				.flatMapToPair(new CBSToBytes())
-				.mapToPair(new StringByteToTextByteWriter());
-
+		 List<Tuple2<Text, BytesWritable>> distData = sc.parallelize(newList)
+		.mapToPair(new PDBCodeToCBS())
+		.flatMapToPair(new CBSToBytes())
+		.mapToPair(new StringByteToTextByteWriter()).collect();
+		sc.close();
 		
 		return distData;
 	}
 	
-	/**
-	 * 
-	 * @return
-	 */
-	private JavaPairRDD<Text, BytesWritable> getOrig(){
-
-		String path = "Total.hadoop.latest.bzip2";
-		// This is the default 2 line structure for Spark applications
-		SparkConf conf = new SparkConf().setMaster("local[" + NUM_THREADS + "]")
-				.setAppName(SparkRead.class.getSimpleName());
-		// Set the config
-		JavaSparkContext sc = new JavaSparkContext(conf);
-		JavaPairRDD<Text, BytesWritable> jprdd = sc
-				.sequenceFile(path, Text.class, BytesWritable.class, NUM_THREADS * NUM_TASKS_PER_THREAD);
-		return jprdd;
-	}
 }
