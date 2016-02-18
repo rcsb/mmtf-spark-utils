@@ -31,6 +31,7 @@ public class ByteArrayToBioJavaStructMapper implements PairFunction<Tuple2<Strin
 		newStruct.setPDBCode(t._1.substring(0,4));}
 		catch(Exception e){
 			System.out.println(e);
+			System.out.println(t._1);
 			Structure thisStruct = new StructureImpl();
 			return new Tuple2<String, Structure>(t._1,thisStruct);
 		}
