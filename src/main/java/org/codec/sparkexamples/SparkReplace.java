@@ -32,16 +32,6 @@ public class SparkReplace {
 	{
 
 		String path = "Total.hadoop.latest.bzip2";
-		// This is the default 2 line structure for Spark applications
-		SparkConf conf = new SparkConf().setMaster("local[" + NUM_THREADS + "]")
-				.setAppName(SparkRead.class.getSimpleName());
-		// Set the config
-		JavaSparkContext sc = new JavaSparkContext(conf);
-		JavaPairRDD<Text, BytesWritable> origData = sc
-				.sequenceFile(path, Text.class, BytesWritable.class, NUM_THREADS * NUM_TASKS_PER_THREAD);
-
-		
-		SparkReplace sr = new SparkReplace();
 		List<String> newList = new ArrayList<String>();
 		newList.add("2KPR");
 		newList.add("2PN3");
@@ -51,11 +41,27 @@ public class SparkReplace {
 		newList.add("3NAO");
 		newList.add("4XNO");
 		newList.add("4YAZ");
+		// This is the default 2 line structure for Spark applications
+		SparkConf conf = new SparkConf().setMaster("local[" + NUM_THREADS + "]")
+				.setAppName(SparkRead.class.getSimpleName());
+		// Set the config
+		JavaSparkContext sc = new JavaSparkContext(conf);
+		JavaPairRDD<Text, BytesWritable> origData = sc
+				.sequenceFile(path, Text.class, BytesWritable.class, NUM_THREADS * NUM_TASKS_PER_THREAD)
+				.filter(t -> t._1.toString().startsWith("2KPR")==false)
+				.filter(t -> t._1.toString().startsWith("2PN3")==false)
+				.filter(t -> t._1.toString().startsWith("2KZD")==false)
+				.filter(t -> t._1.toString().startsWith("8BNA")==false)
+				.filter(t -> t._1.toString().startsWith("3JA4")==false)
+				.filter(t -> t._1.toString().startsWith("3NAO")==false)
+				.filter(t -> t._1.toString().startsWith("4XNO")==false)
+				.filter(t -> t._1.toString().startsWith("4YAZ")==false);
+		// 
+		SparkReplace sr = new SparkReplace();
 		List<Tuple2<String, byte[]>> newData = sr.getNew(newList, sc);
 		 JavaPairRDD<String, byte[]> me = sc.parallelizePairs(newData);
-		origData.join(me.mapToPair(new StringByteToTextByteWriter()));
+		origData.union(me.mapToPair(new StringByteToTextByteWriter()));
 		origData.saveAsHadoopFile("NEWDATA", Text.class, BytesWritable.class, SequenceFileOutputFormat.class, org.apache.hadoop.io.compress.BZip2Codec.class);
-		
 		sc.stop();
 		sc.close();
 	}
