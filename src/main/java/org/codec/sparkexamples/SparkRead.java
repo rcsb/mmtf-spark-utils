@@ -39,7 +39,18 @@ public class SparkRead implements Serializable {
 		SparkConf conf = new SparkConf().setMaster("local[" + NUM_THREADS + "]")
 				.setAppName(SparkRead.class.getSimpleName());
 		// Set the config
+		
 		JavaSparkContext sc = new JavaSparkContext(conf);
+		
+		
+		@SuppressWarnings("unused")
+		
+		
+		
+		JavaPairRDD<Text, BytesWritable> thisRDD = sc.sequenceFile(path, Text.class,
+				BytesWritable.class, NUM_THREADS * NUM_TASKS_PER_THREAD);
+
+		
 		JavaPairRDD<String, Structure> jprdd = sc
 				.sequenceFile(path, Text.class, BytesWritable.class, NUM_THREADS * NUM_TASKS_PER_THREAD)
 				.mapToPair(new ByteWriteToByteArr())
