@@ -32,6 +32,7 @@ public class BroadcastExample {
 		// This is the default 2 line structure for Spark applications
 		SparkConf conf = new SparkConf().setMaster("local[" + NUM_THREADS + "]")
 				.setAppName(SparkRead.class.getSimpleName());
+		conf.set("spark.driver.maxResultSize", "14g");
 		// Set the config
 		JavaSparkContext sc = new JavaSparkContext(conf);
 
