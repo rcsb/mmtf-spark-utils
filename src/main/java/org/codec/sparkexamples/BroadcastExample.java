@@ -45,6 +45,7 @@ public class BroadcastExample {
 		// Now gewt the chains
 		List<Tuple2<String, Chain>> chains = sc
 				.sequenceFile(path, Text.class, BytesWritable.class, NUM_THREADS * NUM_TASKS_PER_THREAD)
+				.sample(true, 0.01)
 				.mapToPair(new ByteWriteToByteArr())
 				.mapToPair(new ByteArrayToBioJavaStructMapper())
 				.flatMapToPair(new StructToChains())
