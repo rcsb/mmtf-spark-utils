@@ -13,6 +13,7 @@ import org.biojava.nbio.structure.Chain;
 import org.codec.mappers.ByteArrayToBioJavaStructMapper;
 import org.codec.mappers.ByteWriteToByteArr;
 import org.codec.mappers.ChainPairToTmMapper;
+import org.codec.mappers.StructToChains;
 
 import scala.Tuple2;
 

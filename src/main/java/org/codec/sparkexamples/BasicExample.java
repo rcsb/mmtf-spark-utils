@@ -12,6 +12,7 @@ import org.apache.spark.api.java.function.Function2;
 import org.biojava.nbio.structure.rcsb.GetRepresentatives;
 import org.codec.filters.IdFilter;
 import org.codec.mappers.PdbIdToBioJavaStruct;
+import org.codec.mappers.StructToChains;
 
 public class BasicExample {
 

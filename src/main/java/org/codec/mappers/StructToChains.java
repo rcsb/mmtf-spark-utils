@@ -1,4 +1,4 @@
-package org.codec.sparkexamples;
+package org.codec.mappers;
 
 import java.util.ArrayList;
 import java.util.List;
