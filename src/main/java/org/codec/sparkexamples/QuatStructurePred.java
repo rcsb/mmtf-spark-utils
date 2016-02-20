@@ -15,6 +15,7 @@ import org.apache.spark.api.java.JavaSparkContext;
 import org.codec.mappers.ByteArrayToBioJavaStructMapper;
 import org.codec.mappers.ByteWriteToByteArr;
 import org.codec.mappers.StructureToBioAssemblies;
+import org.codec.proccessors.PredictQuatStructures;
 import org.codec.proccessors.RadiusOfGyrationMapper;
 
 /**
@@ -22,7 +23,7 @@ import org.codec.proccessors.RadiusOfGyrationMapper;
  * generate BioJava objects
  * @author  Peter Rose
  */
-public class SparkRadGyr implements Serializable {    
+public class QuatStructurePred implements Serializable {    
 	/**
 	 * 
 	 */
@@ -35,23 +36,20 @@ public class SparkRadGyr implements Serializable {
 		String path = "totFileTestSmall.hadoop";
 		// This is the default 2 line structure for Spark applications
 		SparkConf conf = new SparkConf().setMaster("local[" + NUM_THREADS + "]")
-				.setAppName(SparkRadGyr.class.getSimpleName());
+				.setAppName(QuatStructurePred.class.getSimpleName());
 		// Set the config
 		JavaSparkContext sc = new JavaSparkContext(conf);
 		// Time the proccess
 		long start = System.nanoTime();
-		JavaPairRDD<String, Float> jprdd = sc
+		JavaPairRDD<String, String> jprdd = sc
 				.sequenceFile(path, Text.class, BytesWritable.class, NUM_THREADS * NUM_TASKS_PER_THREAD)
 				// Now get the structure
 				.mapToPair(new ByteWriteToByteArr())
 				.mapToPair(new ByteArrayToBioJavaStructMapper())
 				.flatMapToPair(new StructureToBioAssemblies())
-				.mapToPair(new RadiusOfGyrationMapper());
+				.mapToPair(new PredictQuatStructures());
 		// Now collect the results
-		JavaRDD<Float> values = jprdd.values();
-		List<Float> outValues = values.collect();
-		// Now print them out
-		System.out.println(outValues);
+		jprdd.saveAsTextFile("outputData");
 		sc.stop();
 		sc.close();
 		System.out.println("Time: " + (System.nanoTime() - start)/1E9 + " sec.");
