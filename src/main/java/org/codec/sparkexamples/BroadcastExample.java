@@ -1,24 +1,18 @@
 package org.codec.sparkexamples;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.SortedSet;
 
 import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
-import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.broadcast.Broadcast;
 import org.biojava.nbio.structure.Chain;
-import org.biojava.nbio.structure.rcsb.GetRepresentatives;
-import org.codec.filters.IdFilter;
 import org.codec.mappers.ByteArrayToBioJavaStructMapper;
 import org.codec.mappers.ByteWriteToByteArr;
 import org.codec.mappers.ChainPairToTmMapper;
-import org.codec.mappers.PdbIdToBioJavaStruct;
 
 import scala.Tuple2;
 
@@ -36,17 +30,14 @@ public class BroadcastExample {
 		// Set the config
 		JavaSparkContext sc = new JavaSparkContext(conf);
 
-		// Get all the PDB IDs
-		SortedSet<String> thisSet = GetRepresentatives.getAll();
-		List<String> pdbCodeList = new ArrayList<String>(thisSet);
 		
-		// Set the string
+		// This time we read in from this input file 
 		String path = "/home/anthony/src/codec-devel/data/Total.hadoop.maindata.bzip2";
 		
-		// Now gewt the chains
+		// Now get the chains
 		List<Tuple2<String, Chain>> chains = sc
 				.sequenceFile(path, Text.class, BytesWritable.class, NUM_THREADS * NUM_TASKS_PER_THREAD)
-				.sample(true, 0.01)
+				.sample(false, 0.01)
 				.mapToPair(new ByteWriteToByteArr())
 				.mapToPair(new ByteArrayToBioJavaStructMapper())
 				.flatMapToPair(new StructToChains())

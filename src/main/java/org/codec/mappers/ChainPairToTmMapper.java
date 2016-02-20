@@ -6,8 +6,6 @@ import scala.Tuple2;
 
 import java.util.List;
 
-import javax.vecmath.Point3d;
-
 import org.apache.spark.broadcast.Broadcast;
 import org.biojava.nbio.structure.Atom;
 import org.biojava.nbio.structure.Chain;
@@ -71,7 +69,7 @@ public class ChainPairToTmMapper implements PairFunction<Tuple2<Integer,Integer>
         afpChain.setName2(t2._1);
         
         
-		
+		// Now return the align score
 		return new Tuple2<String, Double>(key.toString(), afpChain.getAlignScore());
     }
 }
