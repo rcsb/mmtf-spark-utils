@@ -2,21 +2,16 @@ package org.codec.sparkexamples;
 
 
 import java.io.Serializable;
-import java.util.List;
-
-
 
 import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
-import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.codec.mappers.ByteArrayToBioJavaStructMapper;
 import org.codec.mappers.ByteWriteToByteArr;
 import org.codec.mappers.StructureToBioAssemblies;
 import org.codec.proccessors.PredictQuatStructures;
-import org.codec.proccessors.RadiusOfGyrationMapper;
 
 /**
  * Demo Map-Reduce program that shows how to read a Hadoop Sequence file and

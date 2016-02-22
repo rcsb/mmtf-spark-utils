@@ -44,9 +44,6 @@ public class SparkRead implements Serializable {
 		
 		
 		@SuppressWarnings("unused")
-		
-		
-		
 		JavaPairRDD<Text, BytesWritable> thisRDD = sc.sequenceFile(path, Text.class,
 				BytesWritable.class, NUM_THREADS * NUM_TASKS_PER_THREAD);
 
