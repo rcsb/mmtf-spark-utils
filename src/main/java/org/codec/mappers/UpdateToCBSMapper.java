@@ -8,12 +8,12 @@ import org.apache.hadoop.io.Text;
 import org.apache.spark.api.java.function.PairFunction;
 import org.biojava.nbio.structure.Structure;
 import org.biojava.nbio.structure.StructureIO;
-import org.codec.dataholders.CreateBasicStructure;
+import org.codec.biojavaencoder.ParseFromBiojava;
 import org.codec.dataholders.PDBGroup;
 
 import scala.Tuple2;
 
-public class UpdateToCBSMapper implements PairFunction<String, String, CreateBasicStructure>{
+public class UpdateToCBSMapper implements PairFunction<String, String, ParseFromBiojava>{
 
 	/**
 	 * 
@@ -21,8 +21,8 @@ public class UpdateToCBSMapper implements PairFunction<String, String, CreateBas
 	private static final long serialVersionUID = 786599975302506694L;	
 
 	@Override
-	public Tuple2<String, CreateBasicStructure> call(String pdbId) throws Exception {
-		CreateBasicStructure cbs = new CreateBasicStructure();
+	public Tuple2<String, ParseFromBiojava> call(String pdbId) throws Exception {
+		ParseFromBiojava cbs = new ParseFromBiojava();
 		String thisId = pdbId.toLowerCase();
 		String midStr = thisId.substring(1, 3);
 		String url = "http://sandboxwest.rcsb.org:10601/sandbox-v4.0/"+midStr+"/"+thisId+"/"+thisId+".cif.gz";
@@ -39,9 +39,9 @@ public class UpdateToCBSMapper implements PairFunction<String, String, CreateBas
 			BytesWritable outBytes = new BytesWritable();
 			byte[] theseBytes = new byte[0];
 			outBytes.set(theseBytes, 0, theseBytes.length);
-			return new Tuple2<String, CreateBasicStructure>(pdbId,cbs);
+			return new Tuple2<String, ParseFromBiojava>(pdbId,cbs);
 		}
-		return new Tuple2<String, CreateBasicStructure>(pdbId,cbs);
+		return new Tuple2<String, ParseFromBiojava>(pdbId,cbs);
 	}
 
 

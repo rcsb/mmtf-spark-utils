@@ -4,12 +4,12 @@ package org.codec.mappers;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.spark.api.java.function.PairFunction;
-import org.codec.dataholders.CreateBasicStructure;
+import org.codec.biojavaencoder.ParseFromBiojava;
 import org.codec.dataholders.PDBGroup;
 
 import scala.Tuple2;
 
-public class PDBCodeToCBS implements PairFunction<String, String, CreateBasicStructure>{
+public class PDBCodeToCBS implements PairFunction<String, String, ParseFromBiojava>{
 
 	/**
 	 * 
@@ -17,8 +17,8 @@ public class PDBCodeToCBS implements PairFunction<String, String, CreateBasicStr
 	private static final long serialVersionUID = 786599975302506694L;	
 
 	@Override
-	public Tuple2<String, CreateBasicStructure> call(String t) throws Exception {
-		CreateBasicStructure cbs = new CreateBasicStructure();
+	public Tuple2<String, ParseFromBiojava> call(String t) throws Exception {
+		ParseFromBiojava cbs = new ParseFromBiojava();
 		Map<Integer, PDBGroup> totMap = new HashMap<Integer, PDBGroup>();
 		try{
 			cbs.createFromJavaStruct(t, totMap);
@@ -27,10 +27,10 @@ public class PDBCodeToCBS implements PairFunction<String, String, CreateBasicStr
 			// Just return the object
 			System.out.println(e+"  ::  "+t);
 			System.out.println(e.getMessage());
-			return new Tuple2<String, CreateBasicStructure>(t,cbs);
+			return new Tuple2<String, ParseFromBiojava>(t,cbs);
 		}
 		// If it doesn't fail also return the object
-		return new Tuple2<String, CreateBasicStructure>(t,cbs);
+		return new Tuple2<String, ParseFromBiojava>(t,cbs);
 	}
 
 

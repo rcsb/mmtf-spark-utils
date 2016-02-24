@@ -7,13 +7,13 @@ import java.util.List;
 import org.apache.spark.api.java.function.PairFlatMapFunction;
 import org.codec.dataholders.BioDataStruct;
 import org.codec.dataholders.CalphaDistBean;
-import org.codec.dataholders.CreateBasicStructure;
 import org.codec.dataholders.HeaderBean;
+import org.codec.biojavaencoder.ParseFromBiojava;
 import org.codec.biojavaencoder.EncoderUtils;
 
 import scala.Tuple2;
 
-public class CBSToBytes  implements PairFlatMapFunction<Tuple2<String,CreateBasicStructure>, String, byte[]>{
+public class CBSToBytes  implements PairFlatMapFunction<Tuple2<String,ParseFromBiojava>, String, byte[]>{
 
 	/**
 	 * 
@@ -21,11 +21,11 @@ public class CBSToBytes  implements PairFlatMapFunction<Tuple2<String,CreateBasi
 	private static final long serialVersionUID = 2066093446043635571L;
 
 	@Override
-	public Iterable<Tuple2<String, byte[]>> call(Tuple2<String, CreateBasicStructure> t) throws IOException, IllegalAccessException, InvocationTargetException {
+	public Iterable<Tuple2<String, byte[]>> call(Tuple2<String, ParseFromBiojava> t) throws IOException, IllegalAccessException, InvocationTargetException {
 		// First generate the list to return
 		List<Tuple2<String, byte[]>> outList = new ArrayList<Tuple2<String, byte[]>>();
 		EncoderUtils cm = new EncoderUtils();
-		CreateBasicStructure cbs = t._2;
+		ParseFromBiojava cbs = t._2;
 		// Now get the header too
 		HeaderBean headerData = cbs.getHeaderStruct();
 		BioDataStruct thisBS = cbs.getBioStruct();

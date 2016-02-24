@@ -20,7 +20,7 @@ import org.biojava.nbio.structure.io.LocalPDBDirectory.FetchBehavior;
 import org.biojava.nbio.structure.io.mmcif.ChemCompGroupFactory;
 import org.biojava.nbio.structure.io.mmcif.DownloadChemCompProvider;
 import org.biojava.nbio.structure.rcsb.GetRepresentatives;
-import org.codec.dataholders.CreateBasicStructure;
+import org.codec.biojavaencoder.ParseFromBiojava;
 import org.codec.dataholders.PDBGroup;
 
 public class SparkSDSCTester {
@@ -69,7 +69,7 @@ public class SparkSDSCTester {
 
 					@Override
 					public Boolean call(String v1) throws Exception {
-						CreateBasicStructure cbs = new CreateBasicStructure();
+						ParseFromBiojava cbs = new ParseFromBiojava();
 						Map<Integer, PDBGroup> totMap = new HashMap<Integer, PDBGroup>();
 						try{
 							cbs.createFromJavaStruct(v1, totMap);
