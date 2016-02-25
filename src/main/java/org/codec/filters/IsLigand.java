@@ -2,6 +2,7 @@ package org.codec.filters;
 
 
 import org.apache.spark.api.java.function.Function;
+import org.biojava.nbio.structure.Atom;
 import org.biojava.nbio.structure.Group;
 
 import scala.Tuple2;
@@ -25,6 +26,9 @@ public class IsLigand implements Function<Tuple2<String, Group>, Boolean> {
 		if(inGroup.isWater()==true){
 			return false;
 		}
+		else if(isJustOneAtom(inGroup)){
+			return false;
+		}
 		else if(isBanned(inGroup)==true){
 			return false;
 		}
@@ -39,11 +43,23 @@ public class IsLigand implements Function<Tuple2<String, Group>, Boolean> {
 		else if(isLigand(inGroup)==true){
 			return true;
 		}
-		
 		else{
 			return false;
 		}
 		
+	}
+	
+	/**
+	 * Function to check if an atom only has one atom
+	 * @param inGroup
+	 * @return
+	 */
+	private boolean isJustOneAtom(Group inGroup) {
+		// Check if the group is just metal atoms
+		if(inGroup.size()==1){
+			return false;
+		}
+		return true;
 	}
 
 	/**

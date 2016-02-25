@@ -1,4 +1,4 @@
-package org.codec.collectors;
+package org.codec.mappers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +10,7 @@ import org.biojava.nbio.structure.Structure;
 
 import scala.Tuple2;
 
-public class GetPDBGroups implements PairFlatMapFunction<Tuple2<String,Structure>, String, Group>{
+public class StructToPDBGroup implements PairFlatMapFunction<Tuple2<String,Structure>, String, Group>{
 
 	/**
 	 * 
