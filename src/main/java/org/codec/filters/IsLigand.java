@@ -2,7 +2,6 @@ package org.codec.filters;
 
 
 import org.apache.spark.api.java.function.Function;
-import org.biojava.nbio.structure.Atom;
 import org.biojava.nbio.structure.Group;
 
 import scala.Tuple2;
