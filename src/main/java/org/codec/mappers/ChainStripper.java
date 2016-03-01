@@ -51,7 +51,7 @@ public class ChainStripper implements PairFlatMapFunction<Tuple2<String,CalphaDi
 		for(int i=0; i<groupsPerChain.length;i++){
 			thisSum+=groupsPerChain[i];
 		}
-		System.out.println("GROUPLIST LENGTH: "+groupList.length+" VS GROUPS PER CHAIN SUM: "+thisSum);
+		System.out.println(xs.getPdbId()+"  GROUPLIST LENGTH: "+groupList.length+" VS GROUPS PER CHAIN SUM: "+thisSum	);
 		List<String> calphaArr = new ArrayList<String>();
 		calphaArr.add("C");
 		calphaArr.add("CA");
