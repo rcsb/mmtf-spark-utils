@@ -63,6 +63,7 @@ public class SparkSDSCHadoopWriter {
 		// Now read this list in
 		JavaPairRDD<Text, BytesWritable> distData =
 				sc.parallelize(pdbCodeList)
+				.sample(true, 0.001)
 				.mapToPair(new PDBCodeToCBS())
 				.flatMapToPair(new CBSToBytes())
 				.mapToPair(new StringByteToTextByteWriter());
