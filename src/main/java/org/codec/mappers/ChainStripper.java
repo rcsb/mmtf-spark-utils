@@ -97,6 +97,7 @@ public class ChainStripper implements PairFlatMapFunction<Tuple2<String,CalphaDi
 				atomCounter+=atomCount;
 				newGroupTypeList.add(g);
 				newOneLetterCodeList[j] = thisGroup.getSingleLetterCode().charAt(0);
+				System.out.println("HERE");
 				newSecStructList.add(secStructList[groupCounter]);
 				newGroupsThisChain++;
 				newNumAtoms+=atomCount;
