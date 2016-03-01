@@ -47,6 +47,11 @@ public class ChainStripper implements PairFlatMapFunction<Tuple2<String,CalphaDi
 		int groupCounter = 0;
 		int atomCounter = 0;
 		int[] groupList = ds.bytesToInts(xs.getGroupTypeList());
+		int thisSum = 0;
+		for(int i=0; i<groupsPerChain.length;i++){
+			thisSum+=groupsPerChain[i];
+		}
+		System.out.println("GROUPLIST LENGTH: "+groupList.length+" VS GROUPS PER CHAIN SUM: "+thisSum);
 		List<String> calphaArr = new ArrayList<String>();
 		calphaArr.add("C");
 		calphaArr.add("CA");
@@ -56,7 +61,6 @@ public class ChainStripper implements PairFlatMapFunction<Tuple2<String,CalphaDi
 		// GENERATE THe ARRAYS TO OUTPUT		
 		for (int i=0; i<numChains;i++){
 			CalphaDistBean outChain = new CalphaDistBean();
-			
 			outChain.setBioAssembly(xs.getBioAssembly());
 			outChain.setChainList(java.util.Arrays.copyOfRange(chainList, i*4, i*4+4));
 			outChain.setChainsPerModel(new int[] {1});
@@ -72,7 +76,7 @@ public class ChainStripper implements PairFlatMapFunction<Tuple2<String,CalphaDi
 			int newNumAtoms = 0;
 			for(int j=0; j<groupsThisChain;j++){
 				int g = groupList[groupCounter];
-//				int secStructThisG = secStructList[groupCounter];
+				int secStructThisG = secStructList[groupCounter];
 				// Now increment the groupCounter
 				groupCounter++;
 				PDBGroup thisGroup = groupMap.get(g);
