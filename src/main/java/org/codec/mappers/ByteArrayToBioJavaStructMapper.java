@@ -5,6 +5,8 @@ import org.biojava.nbio.structure.Structure;
 import org.biojava.nbio.structure.StructureImpl;
 import org.codec.decoder.BioJavaStructureInflator;
 import org.codec.decoder.DecodeStructure;
+import org.codec.decoder.ParsingParams;
+
 import scala.Tuple2;
 
 /**
@@ -25,8 +27,9 @@ public class ByteArrayToBioJavaStructMapper implements PairFunction<Tuple2<Strin
 		DecodeStructure ds = new DecodeStructure();
 		BioJavaStructureInflator bjs = new BioJavaStructureInflator();
 		Structure newStruct;
+		ParsingParams pp = new ParsingParams();
 		try{
-		ds.getStructFromByteArray(t._2, bjs);
+		ds.getStructFromByteArray(t._2, bjs, pp);
 		newStruct = bjs.getStructure();
 		newStruct.setPDBCode(t._1.substring(0,4));}
 		catch(Exception e){
