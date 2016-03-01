@@ -33,7 +33,7 @@ public class ChainStripper implements PairFlatMapFunction<Tuple2<String,CalphaDi
 		List<Tuple2<String, CalphaDistBean>> outArr = new ArrayList<Tuple2<String, CalphaDistBean>>();
 		DeltaDeCompress delta = new DeltaDeCompress();
 		DecodeStructure ds = new DecodeStructure();
-		CalphaDistBean xs = new CalphaDistBean();
+		CalphaDistBean xs = t._2;
 		// Get the coordinates
 		int[] cartnX = delta.decompressByteArray(xs.getxCoordBig(),xs.getxCoordSmall());
 		int[] cartnY = delta.decompressByteArray(xs.getyCoordBig(),xs.getyCoordSmall());
