@@ -52,7 +52,9 @@ public class SparkSDSCHadoopWriter {
 		DownloadChemCompProvider dcc = new DownloadChemCompProvider();
 		ChemCompGroupFactory.setChemCompProvider(dcc);
 		dcc.checkDoFirstInstall();
+		dcc.setDownloadAll(true);
 		params.setLoadChemCompInfo(true);
+		params.setUseInternalChainId(true);
 		cache.setFileParsingParams(params);
 		StructureIO.setAtomCache(cache);
 		// Get all the PDB IDs
