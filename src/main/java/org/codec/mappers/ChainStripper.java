@@ -61,7 +61,6 @@ public class ChainStripper implements PairFlatMapFunction<Tuple2<String,CalphaDi
 			outChain.setChainList(java.util.Arrays.copyOfRange(chainList, i*4, i*4+4));
 			outChain.setChainsPerModel(new int[] {1});
 			outChain.setGroupMap(xs.getGroupMap());
-			
 			int groupsThisChain = groupsPerChain[i];
 			int newGroupsThisChain = 0;
 			char[] newOneLetterCodeList = new char[groupsThisChain];
@@ -73,7 +72,7 @@ public class ChainStripper implements PairFlatMapFunction<Tuple2<String,CalphaDi
 			int newNumAtoms = 0;
 			for(int j=0; j<groupsThisChain;j++){
 				int g = groupList[groupCounter];
-				int secStructThisG = secStructList[groupCounter];
+//				int secStructThisG = secStructList[groupCounter];
 				// Now increment the groupCounter
 				groupCounter++;
 				PDBGroup thisGroup = groupMap.get(g);
@@ -98,7 +97,7 @@ public class ChainStripper implements PairFlatMapFunction<Tuple2<String,CalphaDi
 				atomCounter+=atomCount;
 				newGroupTypeList.add(g);
 				newOneLetterCodeList[j] = thisGroup.getSingleLetterCode().charAt(0);
-				newSecStructList.add(secStructThisG);
+//				newSecStructList.add(secStructThisG);
 				newGroupsThisChain++;
 				newNumAtoms+=atomCount;
 			}
