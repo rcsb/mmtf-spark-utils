@@ -22,9 +22,18 @@ import scala.Tuple2;
  */
 public class ChainStripper implements PairFlatMapFunction<Tuple2<String,CalphaDistBean>, String, CalphaAlignBean>{
 
-	/**
-	 * 
-	 */
+	private int groupCounter;
+	private int atomCounter;
+	private int[] groupList;
+	private int[] groupsPerChain;
+	int[] cartnX;
+	int[] cartnY;
+	int[] cartnZ;
+	Map<Integer, PDBGroup> groupMap;
+	byte[] chainList;
+	private List<String> calphaArr;
+	private List<String> dnarnaArr;
+	
 	private static final long serialVersionUID = -8516822489889006992L;
 
 	@Override
@@ -36,88 +45,101 @@ public class ChainStripper implements PairFlatMapFunction<Tuple2<String,CalphaDi
 		DecodeStructure ds = new DecodeStructure();
 		CalphaDistBean xs = t._2;
 		// Get the coordinates
-		int[] cartnX = delta.decompressByteArray(xs.getxCoordBig(),xs.getxCoordSmall());
-		int[] cartnY = delta.decompressByteArray(xs.getyCoordBig(),xs.getyCoordSmall());
-		int[] cartnZ = delta.decompressByteArray(xs.getzCoordBig(),xs.getzCoordSmall());
-		int[] groupsPerChain = xs.getGroupsPerChain();
-		Map<Integer, PDBGroup> groupMap = xs.getGroupMap();
-		int numChains = xs.getChainsPerModel()[0];
-		byte[] chainList = xs.getChainList();
+		cartnX = delta.decompressByteArray(xs.getxCoordBig(),xs.getxCoordSmall());
+		cartnY = delta.decompressByteArray(xs.getyCoordBig(),xs.getyCoordSmall());
+		cartnZ = delta.decompressByteArray(xs.getzCoordBig(),xs.getzCoordSmall());
+		groupMap = xs.getGroupMap();
+		chainList = xs.getChainList();
 		// Loop through the chains
-		int groupCounter = 0;
-		int atomCounter = 0;
-		int[] groupList = ds.bytesToInts(xs.getGroupTypeList());
+		groupCounter = 0;
+		atomCounter = 0;
+		groupList = ds.bytesToInts(xs.getGroupTypeList());
+		groupsPerChain = xs.getGroupsPerChain();
+
+		int numChains = xs.getChainsPerModel()[0];
 		// Now set the requirements for a calpha group
-		List<String> calphaArr = new ArrayList<String>();
+		calphaArr = new ArrayList<String>();
 		calphaArr.add("C");
 		calphaArr.add("CA");
-		List<String> dnarnaArr = new ArrayList<String>();
+		dnarnaArr = new ArrayList<String>();
 		dnarnaArr.add("P");
 		dnarnaArr.add("P");
 		
 		// GENERATE THe ARRAYS TO OUTPUT		
 		for (int i=0; i<numChains;i++){
-			boolean peptideFlag = false;
-			boolean dnaRnaFlag = false;
-			CalphaAlignBean outChain = new CalphaAlignBean();
-			int groupsThisChain = groupsPerChain[i];
-			char[] newOneLetterCodeList = new char[groupsThisChain];
-			List<Point3d> thesePoints = new ArrayList<Point3d>();
-			for(int j=0; j<groupsThisChain;j++){
-				int g = groupList[groupCounter];
-				// Now increment the groupCounter
-				groupCounter++;
-				PDBGroup thisGroup = groupMap.get(g);
-				List<String> atomInfo = thisGroup.getAtomInfo();
-				// Now check - this is protein / DNA or RNA
-				int atomCount = atomInfo.size()/2;
-				if(atomCount<2){
-					if(atomInfo.equals(calphaArr)==false && atomInfo.equals(dnarnaArr)==false){
-						atomCounter+=atomCount;
-						continue;
-					}
-				}
-				else{
+			CalphaAlignBean outChain;
+			try{
+			outChain = getChain(i, xs.getPdbId(), ds.getChainId(chainList, i));
+			outArr.add(new Tuple2<String, CalphaAlignBean>(outChain.getPdbId(), outChain));
+			}
+			catch(Exception e){
+				System.out.println("ERROR WITH "+xs.getPdbId()+" CHAIN"+ds.getChainId(chainList, i));
+				System.out.println(e.getMessage());
+			}
+		}
+		return  outArr;
+	}
+
+	private CalphaAlignBean getChain(int i, String pdbId, String chainId) {
+		boolean peptideFlag = false;
+		boolean dnaRnaFlag = false;
+		CalphaAlignBean outChain = new CalphaAlignBean();
+		int groupsThisChain = groupsPerChain[i];
+		char[] newOneLetterCodeList = new char[groupsThisChain];
+		List<Point3d> thesePoints = new ArrayList<Point3d>();
+		for(int j=0; j<groupsThisChain;j++){
+			int g = groupList[groupCounter];
+			// Now increment the groupCounter
+			groupCounter++;
+			PDBGroup thisGroup = groupMap.get(g);
+			List<String> atomInfo = thisGroup.getAtomInfo();
+			// Now check - this is protein / DNA or RNA
+			int atomCount = atomInfo.size()/2;
+			if(atomCount<2){
+				if(atomInfo.equals(calphaArr)==false && atomInfo.equals(dnarnaArr)==false){
 					atomCounter+=atomCount;
 					continue;
 				}
-				if(atomInfo.equals(calphaArr)==true){
-					peptideFlag=true;
-				}
-				if(atomInfo.equals(dnarnaArr)==true){
-					dnaRnaFlag=true;
-				}
-				for(int k=0;k<atomCount;k++){
-					Point3d newPoint = new Point3d(); 
-					newPoint.x = cartnX[atomCounter+k]/1000.0;
-					newPoint.y = cartnY[atomCounter+k]/1000.0;
-					newPoint.z = cartnZ[atomCounter+k]/1000.0;
-					thesePoints.add(newPoint);
-				}
+			}
+			else{
 				atomCounter+=atomCount;
-				newOneLetterCodeList[j] = thisGroup.getSingleLetterCode().charAt(0);
+				continue;
 			}
-			// Set data for Chain
-			outChain.setPdbId(xs.getPdbId());
-			outChain.setChainId(ds.getChainId(chainList, i));
-			outChain.setCoordList(thesePoints.toArray(new Point3d[thesePoints.size()]));
-			outChain.setSequence(newOneLetterCodeList);
-			if(peptideFlag==true){
-				if(dnaRnaFlag==true){
-					outChain.setPolymerType("NUCLEOTIDE_PEPTIDE");
-
-				}
-				else{
-					outChain.setPolymerType("PEPTIDE");
-
-				}
+			if(atomInfo.equals(calphaArr)==true){
+				peptideFlag=true;
 			}
-			else if(dnaRnaFlag==true){
-				outChain.setPolymerType("NUCLEOTIDE");
+			if(atomInfo.equals(dnarnaArr)==true){
+				dnaRnaFlag=true;
 			}
-			outArr.add(new Tuple2<String, CalphaAlignBean>(outChain.getPdbId(), outChain));
+			for(int k=0;k<atomCount;k++){
+				Point3d newPoint = new Point3d(); 
+				newPoint.x = cartnX[atomCounter+k]/1000.0;
+				newPoint.y = cartnY[atomCounter+k]/1000.0;
+				newPoint.z = cartnZ[atomCounter+k]/1000.0;
+				thesePoints.add(newPoint);
+			}
+			atomCounter+=atomCount;
+			newOneLetterCodeList[j] = thisGroup.getSingleLetterCode().charAt(0);
 		}
-		return  outArr;
+		// Set data for Chain
+		outChain.setPdbId(pdbId);
+		outChain.setChainId(chainId);
+		outChain.setCoordList(thesePoints.toArray(new Point3d[thesePoints.size()]));
+		outChain.setSequence(newOneLetterCodeList);
+		if(peptideFlag==true){
+			if(dnaRnaFlag==true){
+				outChain.setPolymerType("NUCLEOTIDE_PEPTIDE");
+
+			}
+			else{
+				outChain.setPolymerType("PEPTIDE");
+
+			}
+		}
+		else if(dnaRnaFlag==true){
+			outChain.setPolymerType("NUCLEOTIDE");
+		}
+		return outChain;
 	}
 
 
