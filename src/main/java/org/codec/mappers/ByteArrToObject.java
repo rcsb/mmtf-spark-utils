@@ -1,7 +1,6 @@
 package org.codec.mappers;
 
 
-import java.util.List;
 
 import org.apache.spark.api.java.function.PairFunction;
 import org.codec.dataholders.CalphaDistBean;
