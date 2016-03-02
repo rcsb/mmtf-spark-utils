@@ -4,7 +4,6 @@ package org.codec.sparkexamples;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Properties;
 
 import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.Text;
@@ -12,10 +11,7 @@ import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
-import org.biojava.nbio.structure.Structure;
 import org.codec.biojavaencoder.EncoderUtils;
-import org.codec.dataholders.CalphaAlignBean;
-import org.codec.mappers.ByteArrayToBioJavaStructMapper;
 import org.codec.mappers.ByteWriteToByteArr;
 
 import scala.Tuple2;
@@ -38,7 +34,7 @@ public class SparkReadChains implements Serializable {
 	public static void main(String[] args )
 	{
 		EncoderUtils eu = new EncoderUtils();
-		String path = "/home/anthony/src/codec-devel/Total.hadoop.bzip2";
+		String path = "/home/anthony/src/codec-devel/data/Total.calpha.peter.bzip2";
 		// This is the default 2 line structure for Spark applications
 		SparkConf conf = new SparkConf().setMaster("local[*]")
 				.setAppName(SparkReadChains.class.getSimpleName());
