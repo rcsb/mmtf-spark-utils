@@ -13,8 +13,12 @@ import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.biojava.nbio.structure.Structure;
+import org.codec.biojavaencoder.EncoderUtils;
+import org.codec.dataholders.CalphaAlignBean;
 import org.codec.mappers.ByteArrayToBioJavaStructMapper;
 import org.codec.mappers.ByteWriteToByteArr;
+
+import scala.Tuple2;
 
 /**
  * Demo Map-Reduce program that shows how to read a Hadoop Sequence file and
@@ -33,7 +37,7 @@ public class SparkReadChains implements Serializable {
 
 	public static void main(String[] args )
 	{
-
+		EncoderUtils eu = new EncoderUtils();
 		String path = "/home/anthony/src/codec-devel/Total.hadoop.bzip2";
 		// This is the default 2 line structure for Spark applications
 		SparkConf conf = new SparkConf().setMaster("local[*]")
@@ -42,13 +46,12 @@ public class SparkReadChains implements Serializable {
 		JavaSparkContext sc = new JavaSparkContext(conf);
 		// Time the proccess
 		long start = System.nanoTime();
-		JavaPairRDD<String, Structure> jprdd = sc
+		JavaPairRDD<String, byte[]> jprdd = sc
 				// Read the file
 				.sequenceFile(path, Text.class, BytesWritable.class, 24)
 				// Now get the structure
 				.mapToPair(new ByteWriteToByteArr())
-				.mapToPair(new ByteArrayToChainStructMapper());
-
+				.mapToPair(t -> new Tuple2<String, byte[]>(t._1,eu.getMessagePack(t._2)));
 		JavaRDD<String> vals = jprdd.keys();
 		List<String> theseVals = vals.collect();
 		System.out.println(theseVals.size());
