@@ -100,7 +100,7 @@ public class ChainStripper implements PairFlatMapFunction<Tuple2<String,CalphaDi
 			// Set data for Chain
 			outChain.setPdbId(xs.getPdbId());
 			outChain.setChainId(ds.getChainId(chainList, i));
-			outChain.setCoordList(thesePoints);
+			outChain.setCoordList(thesePoints.toArray(new Point3d[thesePoints.size()]));
 			outChain.setSequence(newOneLetterCodeList);
 			if(peptideFlag==true){
 				if(dnaRnaFlag==true){
