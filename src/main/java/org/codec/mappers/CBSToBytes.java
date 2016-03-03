@@ -5,11 +5,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.spark.api.java.function.PairFlatMapFunction;
-import org.codec.dataholders.BioDataStruct;
-import org.codec.dataholders.CalphaDistBean;
-import org.codec.dataholders.HeaderBean;
-import org.codec.biojavaencoder.ParseFromBiojava;
-import org.codec.biojavaencoder.EncoderUtils;
+import org.rcsb.mmtf.biojavaencoder.EncoderUtils;
+import org.rcsb.mmtf.biojavaencoder.ParseFromBiojava;
+import org.rcsb.mmtf.dataholders.BioDataStruct;
+import org.rcsb.mmtf.dataholders.CalphaDistBean;
+import org.rcsb.mmtf.dataholders.HeaderBean;
 
 import scala.Tuple2;
 

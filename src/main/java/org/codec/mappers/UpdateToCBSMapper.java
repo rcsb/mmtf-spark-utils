@@ -8,7 +8,7 @@ import org.apache.hadoop.io.Text;
 import org.apache.spark.api.java.function.PairFunction;
 import org.biojava.nbio.structure.Structure;
 import org.biojava.nbio.structure.StructureIO;
-import org.codec.biojavaencoder.ParseFromBiojava;
+import org.rcsb.mmtf.biojavaencoder.ParseFromBiojava;
 import org.rcsb.mmtf.dataholders.PDBGroup;
 
 import scala.Tuple2;

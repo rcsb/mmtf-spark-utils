@@ -11,8 +11,8 @@ import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
-import org.codec.biojavaencoder.EncoderUtils;
 import org.codec.mappers.ByteWriteToByteArr;
+import org.rcsb.mmtf.biojavaencoder.EncoderUtils;
 
 import scala.Tuple2;
 

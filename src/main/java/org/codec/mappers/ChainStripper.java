@@ -7,9 +7,9 @@ import java.util.Map;
 import javax.vecmath.Point3d;
 
 import org.apache.spark.api.java.function.PairFlatMapFunction;
-import org.codec.dataholders.CalphaDistBean;
 import org.rcsb.mmtf.arraydecompressors.DeltaDeCompress;
 import org.rcsb.mmtf.dataholders.CalphaAlignBean;
+import org.rcsb.mmtf.dataholders.CalphaDistBean;
 import org.rcsb.mmtf.dataholders.PDBGroup;
 import org.rcsb.mmtf.decoder.DecodeStructure;
 
