@@ -21,7 +21,7 @@ import org.biojava.nbio.structure.io.mmcif.ChemCompGroupFactory;
 import org.biojava.nbio.structure.io.mmcif.DownloadChemCompProvider;
 import org.biojava.nbio.structure.rcsb.GetRepresentatives;
 import org.codec.biojavaencoder.ParseFromBiojava;
-import org.codec.dataholders.PDBGroup;
+import org.rcsb.mmtf.dataholders.PDBGroup;
 
 public class SparkSDSCTester {
 

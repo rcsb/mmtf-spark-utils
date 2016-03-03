@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import org.apache.spark.api.java.function.PairFunction;
 import org.codec.biojavaencoder.ParseFromBiojava;
-import org.codec.dataholders.PDBGroup;
+import org.rcsb.mmtf.dataholders.PDBGroup;
 
 import scala.Tuple2;
 

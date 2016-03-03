@@ -3,9 +3,9 @@ package org.codec.mappers;
 import org.apache.spark.api.java.function.PairFunction;
 import org.biojava.nbio.structure.Structure;
 import org.biojava.nbio.structure.StructureImpl;
-import org.codec.decoder.BioJavaStructureInflator;
-import org.codec.decoder.DecodeStructure;
-import org.codec.decoder.ParsingParams;
+import org.rcsb.mmtf.decoder.BioJavaStructureDecoder;
+import org.rcsb.mmtf.decoder.DecodeStructure;
+import org.rcsb.mmtf.decoder.ParsingParams;
 
 import scala.Tuple2;
 
@@ -25,7 +25,7 @@ public class ByteArrayToBioJavaStructMapper implements PairFunction<Tuple2<Strin
 	@Override
 	public Tuple2<String, Structure> call(Tuple2<String, byte[]> t) throws Exception {
 		DecodeStructure ds = new DecodeStructure();
-		BioJavaStructureInflator bjs = new BioJavaStructureInflator();
+		BioJavaStructureDecoder bjs = new BioJavaStructureDecoder();
 		Structure newStruct;
 		ParsingParams pp = new ParsingParams();
 		try{

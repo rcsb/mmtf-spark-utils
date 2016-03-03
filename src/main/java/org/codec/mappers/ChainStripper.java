@@ -7,11 +7,11 @@ import java.util.Map;
 import javax.vecmath.Point3d;
 
 import org.apache.spark.api.java.function.PairFlatMapFunction;
-import org.codec.arraydecompressors.DeltaDeCompress;
-import org.codec.dataholders.CalphaAlignBean;
 import org.codec.dataholders.CalphaDistBean;
-import org.codec.dataholders.PDBGroup;
-import org.codec.decoder.DecodeStructure;
+import org.rcsb.mmtf.arraydecompressors.DeltaDeCompress;
+import org.rcsb.mmtf.dataholders.CalphaAlignBean;
+import org.rcsb.mmtf.dataholders.PDBGroup;
+import org.rcsb.mmtf.decoder.DecodeStructure;
 
 import scala.Tuple2;
 
