@@ -30,7 +30,7 @@ public class UpdateToCBSMapper implements PairFunction<String, String, ParseFrom
 		Structure bioJavaStruct = StructureIO.getStructure(url);
 		Map<Integer, PDBGroup> totMap = new HashMap<Integer, PDBGroup>();
 		try{
-			cbs.genFromJs(bioJavaStruct, totMap);
+			cbs.generateDataStructuresFromBioJavaStructure(bioJavaStruct, totMap);
 		}
 		catch(Exception e){
 			// Return an empty array
