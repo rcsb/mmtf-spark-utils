@@ -11,7 +11,7 @@ import org.rcsb.mmtf.arraydecompressors.DeltaDeCompress;
 import org.rcsb.mmtf.dataholders.CalphaAlignBean;
 import org.rcsb.mmtf.dataholders.CalphaDistBean;
 import org.rcsb.mmtf.dataholders.PDBGroup;
-import org.rcsb.mmtf.decoder.DecodeStructure;
+import org.rcsb.mmtf.decoder.DecoderUtils;
 
 import scala.Tuple2;
 
@@ -26,10 +26,10 @@ public class ChainStripper implements PairFlatMapFunction<Tuple2<String,CalphaDi
 	private int atomCounter;
 	private int[] groupList;
 	private int[] groupsPerChain;
-	int[] cartnX;
-	int[] cartnY;
-	int[] cartnZ;
-	Map<Integer, PDBGroup> groupMap;
+	private int[] cartnX;
+	private int[] cartnY;
+	private int[] cartnZ;
+	private Map<Integer, PDBGroup> groupMap;
 	byte[] chainList;
 	private List<String> calphaArr;
 	private List<String> dnarnaArr;
@@ -40,9 +40,9 @@ public class ChainStripper implements PairFlatMapFunction<Tuple2<String,CalphaDi
 	public Iterable<Tuple2<String, CalphaAlignBean>> call(Tuple2<String, CalphaDistBean> t) throws Exception {
 		// Loop through the data structure and output a new one - on a per chain level
 		// The out array to produce
+		DecoderUtils decoderUtils = new DecoderUtils();
 		List<Tuple2<String,CalphaAlignBean>> outArr = new ArrayList<Tuple2<String, CalphaAlignBean>>();
 		DeltaDeCompress delta = new DeltaDeCompress();
-		DecodeStructure ds = new DecodeStructure();
 		CalphaDistBean xs = t._2;
 		// Get the coordinates
 		cartnX = delta.decompressByteArray(xs.getxCoordBig(),xs.getxCoordSmall());
@@ -53,7 +53,7 @@ public class ChainStripper implements PairFlatMapFunction<Tuple2<String,CalphaDi
 		// Loop through the chains
 		groupCounter = 0;
 		atomCounter = 0;
-		groupList = ds.bytesToInts(xs.getGroupTypeList());
+		groupList = decoderUtils.bytesToInts(xs.getGroupTypeList());
 		groupsPerChain = xs.getGroupsPerChain();
 
 		int numChains = xs.getChainsPerModel()[0];
@@ -69,11 +69,11 @@ public class ChainStripper implements PairFlatMapFunction<Tuple2<String,CalphaDi
 		for (int i=0; i<numChains;i++){
 			CalphaAlignBean outChain;
 			try{
-			outChain = getChain(i, xs.getPdbId(), ds.getChainId(chainList, i));
+			outChain = getChain(i, xs.getPdbId(), decoderUtils.getChainId(chainList, i));
 			outArr.add(new Tuple2<String, CalphaAlignBean>(outChain.getPdbId(), outChain));
 			}
 			catch(Exception e){
-				System.out.println("ERROR WITH "+xs.getPdbId()+" CHAIN"+ds.getChainId(chainList, i));
+				System.out.println("ERROR WITH "+xs.getPdbId()+" CHAIN"+decoderUtils.getChainId(chainList, i));
 				System.out.println(e.getMessage());
 			}
 		}

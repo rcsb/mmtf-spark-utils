@@ -24,12 +24,12 @@ public class ByteArrayToBioJavaStructMapper implements PairFunction<Tuple2<Strin
 
 	@Override
 	public Tuple2<String, Structure> call(Tuple2<String, byte[]> t) throws Exception {
-		DecodeStructure ds = new DecodeStructure();
 		BioJavaStructureDecoder bjs = new BioJavaStructureDecoder();
 		Structure newStruct;
 		ParsingParams pp = new ParsingParams();
 		try{
-		ds.getStructFromByteArray(t._2, bjs, pp);
+			DecodeStructure ds = new DecodeStructure(t._2);
+		ds.getStructFromByteArray(bjs, pp);
 		newStruct = bjs.getStructure();
 		newStruct.setPDBCode(t._1.substring(0,4));}
 		catch(Exception e){
