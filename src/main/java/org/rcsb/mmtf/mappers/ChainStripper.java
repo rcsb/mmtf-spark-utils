@@ -73,7 +73,7 @@ public class ChainStripper implements PairFlatMapFunction<Tuple2<String,DecodeSt
 			}
 			catch(Exception e){
 				System.out.println("ERROR WITH "+t._1+" CHAIN: "+chainList[i]);
-				System.out.println(e.getMessage());
+				System.out.println(e.getStackTrace());
 			}
 		}
 		return  outArr;
