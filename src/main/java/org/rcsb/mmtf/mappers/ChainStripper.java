@@ -55,11 +55,6 @@ public class ChainStripper implements PairFlatMapFunction<Tuple2<String,DecodeSt
 		// The list of sequence info for each chain
 		sequenceList = decodeStructure.getSequenceInfo();
 		seqResGroupList = decodeStructure.getSeqResGroupList();
-		int sum = 0;
-		for( int grpChain : groupsPerChain){
-			sum+=grpChain;
-		}
-		System.out.println(seqResGroupList.length + " vs " + sum);
 		int numChains = decodeStructure.getChainsPerModel()[0];
 		// Now set the requirements for a calpha group
 		calphaArr = new ArrayList<String>();
@@ -101,7 +96,7 @@ public class ChainStripper implements PairFlatMapFunction<Tuple2<String,DecodeSt
  		for(int j=0; j<groupsThisChain;j++){
 			int g = groupList[groupCounter];
 			// Get the value for this group - that indicates where this group sits on the sequence.
-			currChainSeqToGroupMap[groupCounter] = seqResGroupList[groupCounter];
+			currChainSeqToGroupMap[j] = seqResGroupList[groupCounter];
 			// Now increment the groupCounter
 			groupCounter++;
 			PDBGroup thisGroup = groupMap.get(g);
