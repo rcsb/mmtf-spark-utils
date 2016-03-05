@@ -54,12 +54,13 @@ public class SparkReadChains implements Serializable {
 				.mapToPair(new ByteWriteToByteArr())
 				.mapToPair(t -> new Tuple2<String, CalphaAlignBean>(t._1, new ObjectMapper(new MessagePackFactory()).readValue(t._2, CalphaAlignBean.class)))
 				.map(t -> t._2.getSequence().length())
-				.filter(t -> t < 1);
+				.filter(t -> t > 0);
 
 		
-		
+		jprdd.cache();
 		System.out.println(jprdd.min(Comparator.naturalOrder()));
 		System.out.println(jprdd.max(Comparator.naturalOrder()));
+		System.out.println(jprdd.collect().size());
 
 		sc.stop();
 		sc.close();
