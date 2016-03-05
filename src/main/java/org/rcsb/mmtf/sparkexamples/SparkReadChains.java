@@ -57,11 +57,13 @@ public class SparkReadChains implements Serializable {
 				.mapToPair(new ByteWriteToByteArr())
 				.map(t -> new ObjectMapper(new MessagePackFactory()).readValue(t._2, CalphaAlignBean.class))
 				.mapToPair(t -> new Tuple2<String, Point3d[]>(t.getPdbId()+"_"+t.getChainId(), t.getCoordList()))
+				.sample(true, 0.001)
 				.collect();
 				
 		// Get the total number of chains
 		int nChains = jprdd.size();
 		
+		System.out.println("ANALYSING -> "+nChains+" chains");
 		final Broadcast<List<Tuple2<String,Point3d[]>>> chainsBc = sc.broadcast(jprdd);
 		// Now do the analysis across all these pairs
 		List<Tuple2<Integer, Integer>> totList = new ArrayList<Tuple2<Integer,Integer>>();
@@ -79,7 +81,6 @@ public class SparkReadChains implements Serializable {
 	
 		list.saveAsTextFile("out.results");
 		sc.close();
-
 		System.out.println("Time: " + (System.nanoTime() - start)/1E9 + " sec.");
 	}
 }
