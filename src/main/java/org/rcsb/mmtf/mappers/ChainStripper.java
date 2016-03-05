@@ -64,13 +64,18 @@ public class ChainStripper implements PairFlatMapFunction<Tuple2<String,DecodeSt
 		dnarnaArr = new ArrayList<String>();
 		dnarnaArr.add("P");
 		dnarnaArr.add("P");
-		
+
 		// GENERATE THe ARRAYS TO OUTPUT		
 		for (int i=0; i<numChains;i++){
 			CalphaAlignBean outChain;
 			try{
-			outChain = setInfoForChain(i, t._1, chainList[i]);
-			outArr.add(new Tuple2<String, CalphaAlignBean>(outChain.getPdbId(), outChain));
+				outChain = setInfoForChain(i, t._1, chainList[i]);
+				if(outChain.getPolymerType().equals("NONE")){
+
+				}
+				else{
+					outArr.add(new Tuple2<String, CalphaAlignBean>(outChain.getPdbId(), outChain));
+				}
 			}
 			catch(Exception e){
 				System.out.println("ERROR WITH "+t._1+" CHAIN: "+chainList[i]);
@@ -94,7 +99,7 @@ public class ChainStripper implements PairFlatMapFunction<Tuple2<String,DecodeSt
 		int groupsThisChain = groupsPerChain[currentChainIndex];
 		thesePoints = new ArrayList<Point3d>();
 		int[] currChainSeqToGroupMap = new int[groupsThisChain];
- 		for(int j=0; j<groupsThisChain;j++){
+		for(int j=0; j<groupsThisChain;j++){
 			int g = groupList[groupCounter];
 			// Get the value for this group - that indicates where this group sits on the sequence.
 			currChainSeqToGroupMap[j] = seqResGroupList[groupCounter];
@@ -103,7 +108,7 @@ public class ChainStripper implements PairFlatMapFunction<Tuple2<String,DecodeSt
 			PDBGroup thisGroup = groupMap.get(g);
 			// Convert these into pairs
 			List<String> atomInfo = thisGroup.getAtomInfo();
-			int atomCount = atomInfo.size()/2;
+			int atomCount = atomInfo.size() / 2;
 			for(int thisInd=0; thisInd<atomCount; thisInd++){
 				if(atomInfo.get(thisInd*2).equals("C") && atomInfo.get(thisInd*2+1).equals("CA")){
 					peptideFlag=true;
@@ -136,6 +141,10 @@ public class ChainStripper implements PairFlatMapFunction<Tuple2<String,DecodeSt
 		}
 		else if(dnaRnaFlag==true){
 			outChain.setPolymerType("NUCLEOTIDE");
+		}
+		else{
+			outChain.setPolymerType("NONE");
+
 		}
 		return outChain;
 	}
