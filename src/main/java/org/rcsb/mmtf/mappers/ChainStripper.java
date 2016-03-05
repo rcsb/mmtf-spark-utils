@@ -129,7 +129,10 @@ public class ChainStripper implements PairFlatMapFunction<Tuple2<String,DecodeSt
 		outChain.setChainId(chainId);
 		outChain.setCoordList(thesePoints.toArray(new Point3d[thesePoints.size()]));
 		outChain.setSequence(sequenceList.get(currentChainIndex));
-		if(peptideFlag==true){
+		if(sequenceList.get(currentChainIndex).length()==0){
+			outChain.setPolymerType("NONE");
+		}
+		else if(peptideFlag==true){
 			if(dnaRnaFlag==true){
 				outChain.setPolymerType("NUCLEOTIDE_PEPTIDE");
 
