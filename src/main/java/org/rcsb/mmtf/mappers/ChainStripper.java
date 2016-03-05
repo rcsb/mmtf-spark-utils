@@ -33,6 +33,7 @@ public class ChainStripper implements PairFlatMapFunction<Tuple2<String,DecodeSt
 	private List<String> dnarnaArr;
 	private List<String> sequenceList;
 	private int[] seqResGroupList;
+	private List<Point3d> thesePoints;
 	private static final long serialVersionUID = -8516822489889006992L;
 
 	@Override
@@ -100,32 +101,22 @@ public class ChainStripper implements PairFlatMapFunction<Tuple2<String,DecodeSt
 			// Now increment the groupCounter
 			groupCounter++;
 			PDBGroup thisGroup = groupMap.get(g);
+			// Convert these into pairs
 			List<String> atomInfo = thisGroup.getAtomInfo();
-			// Now check - this is protein / DNA or RNA
-			int atomCount = atomInfo.size()/2;
-			if(atomCount<2){
-				if(atomInfo.equals(calphaArr)==false && atomInfo.equals(dnarnaArr)==false){
-					atomCounter+=atomCount;
-					continue;
+			for(int thisInd=0; thisInd<atomCounter; thisInd++){
+				if(atomInfo.get(thisInd*2).equals("C") && atomInfo.get(thisInd*2+1).equals("CA")){
+					peptideFlag=true;
+					addThisPoint(thisInd);
+					break;
+				}
+				if(atomInfo.get(thisInd*2).equals("P") && atomInfo.get(thisInd*2+1).equals("P")){
+					dnaRnaFlag=true;
+					addThisPoint(thisInd);
+					break;
 				}
 			}
-			else{
-				atomCounter+=atomCount;
-				continue;
-			}
-			if(atomInfo.equals(calphaArr)==true){
-				peptideFlag=true;
-			}
-			if(atomInfo.equals(dnarnaArr)==true){
-				dnaRnaFlag=true;
-			}
-			for(int k=0;k<atomCount;k++){
-				Point3d newPoint = new Point3d(); 
-				newPoint.x = cartnX[atomCounter+k]/1000.0;
-				newPoint.y = cartnY[atomCounter+k]/1000.0;
-				newPoint.z = cartnZ[atomCounter+k]/1000.0;
-				thesePoints.add(newPoint);
-			}
+			// Now check - this is protein / DNA or RNA
+			int atomCount = atomInfo.size()/2;
 			atomCounter+=atomCount;
 		}
 		// Set data for Chain
@@ -147,6 +138,18 @@ public class ChainStripper implements PairFlatMapFunction<Tuple2<String,DecodeSt
 			outChain.setPolymerType("NUCLEOTIDE");
 		}
 		return outChain;
+	}
+
+	/**
+	 * Add the point to this list
+	 * @param thisInd
+	 */
+	private void addThisPoint(int thisInd) {
+		Point3d newPoint = new Point3d(); 
+		newPoint.x = cartnX[atomCounter+thisInd]/1000.0;
+		newPoint.y = cartnY[atomCounter+thisInd]/1000.0;
+		newPoint.z = cartnZ[atomCounter+thisInd]/1000.0;
+		thesePoints.add(newPoint);
 	}
 
 
