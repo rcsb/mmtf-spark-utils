@@ -11,8 +11,13 @@ import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
+import org.msgpack.jackson.dataformat.MessagePackFactory;
 import org.rcsb.mmtf.biojavaencoder.EncoderUtils;
+import org.rcsb.mmtf.dataholders.CalphaAlignBean;
+import org.rcsb.mmtf.dataholders.MmtfBean;
 import org.rcsb.mmtf.mappers.ByteWriteToByteArr;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import scala.Tuple2;
 
@@ -42,12 +47,12 @@ public class SparkReadChains implements Serializable {
 		JavaSparkContext sc = new JavaSparkContext(conf);
 		// Time the proccess
 		long start = System.nanoTime();
-		JavaPairRDD<String, byte[]> jprdd = sc
+		JavaPairRDD<String, CalphaAlignBean> jprdd = sc
 				// Read the file
 				.sequenceFile(path, Text.class, BytesWritable.class, 24)
 				// Now get the structure
 				.mapToPair(new ByteWriteToByteArr())
-				.mapToPair(t -> new Tuple2<String, byte[]>(t._1,eu.getMessagePack(t._2)));
+				.mapToPair(t -> new Tuple2<String, CalphaAlignBean>(t._1, new ObjectMapper(new MessagePackFactory()).readValue(t._2, CalphaAlignBean.class)));
 		JavaRDD<String> vals = jprdd.keys();
 		List<String> theseVals = vals.collect();
 		System.out.println(theseVals.size());
