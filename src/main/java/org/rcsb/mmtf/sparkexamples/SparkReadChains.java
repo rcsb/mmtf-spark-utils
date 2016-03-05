@@ -3,6 +3,7 @@ package org.rcsb.mmtf.sparkexamples;
 
 
 import java.io.Serializable;
+import java.util.Comparator;
 import java.util.List;
 
 import org.apache.hadoop.io.BytesWritable;
@@ -38,7 +39,6 @@ public class SparkReadChains implements Serializable {
 
 	public static void main(String[] args )
 	{
-		EncoderUtils eu = new EncoderUtils();
 		String path = "/home/anthony/src/codec-devel/data/Total.calpha.peter.bzip2";
 		// This is the default 2 line structure for Spark applications
 		SparkConf conf = new SparkConf().setMaster("local[*]")
@@ -47,15 +47,19 @@ public class SparkReadChains implements Serializable {
 		JavaSparkContext sc = new JavaSparkContext(conf);
 		// Time the proccess
 		long start = System.nanoTime();
-		JavaPairRDD<String, CalphaAlignBean> jprdd = sc
+		JavaRDD<Integer> jprdd = sc
 				// Read the file
 				.sequenceFile(path, Text.class, BytesWritable.class, 24)
 				// Now get the structure
 				.mapToPair(new ByteWriteToByteArr())
-				.mapToPair(t -> new Tuple2<String, CalphaAlignBean>(t._1, new ObjectMapper(new MessagePackFactory()).readValue(t._2, CalphaAlignBean.class)));
-		JavaRDD<String> vals = jprdd.keys();
-		List<String> theseVals = vals.collect();
-		System.out.println(theseVals.size());
+				.mapToPair(t -> new Tuple2<String, CalphaAlignBean>(t._1, new ObjectMapper(new MessagePackFactory()).readValue(t._2, CalphaAlignBean.class)))
+				.map(t -> t._2.getSequence().length());
+
+		
+		
+		System.out.println(jprdd.min(Comparator.naturalOrder()));
+		System.out.println(jprdd.max(Comparator.naturalOrder()));
+
 		sc.stop();
 		sc.close();
 		System.out.println("Time: " + (System.nanoTime() - start)/1E9 + " sec.");
