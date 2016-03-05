@@ -53,7 +53,8 @@ public class SparkReadChains implements Serializable {
 				// Now get the structure
 				.mapToPair(new ByteWriteToByteArr())
 				.mapToPair(t -> new Tuple2<String, CalphaAlignBean>(t._1, new ObjectMapper(new MessagePackFactory()).readValue(t._2, CalphaAlignBean.class)))
-				.map(t -> t._2.getSequence().length());
+				.map(t -> t._2.getSequence().length())
+				.filter(t -> t < 1);
 
 		
 		
