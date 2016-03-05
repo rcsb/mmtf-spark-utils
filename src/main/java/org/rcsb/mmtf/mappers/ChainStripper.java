@@ -103,7 +103,8 @@ public class ChainStripper implements PairFlatMapFunction<Tuple2<String,DecodeSt
 			PDBGroup thisGroup = groupMap.get(g);
 			// Convert these into pairs
 			List<String> atomInfo = thisGroup.getAtomInfo();
-			for(int thisInd=0; thisInd<atomCounter; thisInd++){
+			int atomCount = atomInfo.size()/2;
+			for(int thisInd=0; thisInd<atomCount; thisInd++){
 				if(atomInfo.get(thisInd*2).equals("C") && atomInfo.get(thisInd*2+1).equals("CA")){
 					peptideFlag=true;
 					addThisPoint(thisInd);
@@ -116,7 +117,6 @@ public class ChainStripper implements PairFlatMapFunction<Tuple2<String,DecodeSt
 				}
 			}
 			// Now check - this is protein / DNA or RNA
-			int atomCount = atomInfo.size()/2;
 			atomCounter+=atomCount;
 		}
 		// Set data for Chain
