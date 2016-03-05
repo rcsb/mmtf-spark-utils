@@ -92,7 +92,7 @@ public class ChainStripper implements PairFlatMapFunction<Tuple2<String,DecodeSt
 		boolean dnaRnaFlag = false;
 		CalphaAlignBean outChain = new CalphaAlignBean();
 		int groupsThisChain = groupsPerChain[currentChainIndex];
-		List<Point3d> thesePoints = new ArrayList<Point3d>();
+		thesePoints = new ArrayList<Point3d>();
 		int[] currChainSeqToGroupMap = new int[groupsThisChain];
  		for(int j=0; j<groupsThisChain;j++){
 			int g = groupList[groupCounter];
