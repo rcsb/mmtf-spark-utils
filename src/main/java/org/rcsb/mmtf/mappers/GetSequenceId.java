@@ -46,8 +46,8 @@ public class GetSequenceId implements PairFunction<Tuple2<Integer,Integer>,Strin
 
 	@Override
 	public Tuple2<String, Float> call(Tuple2<Integer, Integer> inputTuple) throws Exception {
-		ProteinSequence ps1 = new ProteinSequence(data.get(inputTuple._1)._2.getSequence(), totalCmpdSet);
-		ProteinSequence ps2 = new ProteinSequence(data.get(inputTuple._2)._2.getSequence(), totalCmpdSet);
+		ProteinSequence ps1 = new ProteinSequence(data.get(inputTuple._1)._2.getSequence());
+		ProteinSequence ps2 = new ProteinSequence(data.get(inputTuple._2)._2.getSequence());
 
 		PairwiseSequenceAligner<ProteinSequence, AminoAcidCompound> smithWaterman = Alignments.getPairwiseAligner(ps1, ps2, PairwiseSequenceAlignerType.LOCAL, penalty, matrix);
 		SequencePair<ProteinSequence, AminoAcidCompound> pair = null;
