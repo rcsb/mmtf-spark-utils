@@ -17,7 +17,6 @@ import org.rcsb.mmtf.dataholders.CalphaAlignBean;
 import org.rcsb.mmtf.filters.LengthDiffFilter;
 import org.rcsb.mmtf.filters.LengthFilter;
 import org.rcsb.mmtf.filters.SequenceIdFilter;
-import org.rcsb.mmtf.mappers.AlignmentMapper;
 import org.rcsb.mmtf.mappers.ByteWriteToByteArr;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -54,6 +53,7 @@ public class SparkReadChains implements Serializable {
 		List<Tuple2<String, CalphaAlignBean>> jprdd = sc
 				// Read the file
 				.sequenceFile(path, Text.class, BytesWritable.class, 24)
+				.sample(false, 0.01)
 				// Now get the structure
 				.mapToPair(new ByteWriteToByteArr())
 				.map(t -> new ObjectMapper(new MessagePackFactory()).readValue(t._2, CalphaAlignBean.class))

@@ -34,7 +34,7 @@ public class SequenceIdFilter implements Function<Tuple2<Integer, Integer>, Bool
 	private List<Tuple2<String, CalphaAlignBean>> data;
 
 	public SequenceIdFilter(double minSeqIdInput, Broadcast<List<Tuple2<String,CalphaAlignBean>>> inputData) {
-		// Now 
+		// Now set these varaiable
 		matrix = SubstitutionMatrixHelper.getBlosum65();
 		penalty = new SimpleGapPenalty();
 		minSeqId = minSeqIdInput;
