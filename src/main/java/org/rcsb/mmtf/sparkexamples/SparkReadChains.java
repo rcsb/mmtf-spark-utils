@@ -18,6 +18,7 @@ import org.rcsb.mmtf.filters.LengthDiffFilter;
 import org.rcsb.mmtf.filters.LengthFilter;
 import org.rcsb.mmtf.filters.SequenceIdFilter;
 import org.rcsb.mmtf.mappers.ByteWriteToByteArr;
+import org.rcsb.mmtf.mappers.GetSequenceId;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -76,14 +77,14 @@ public class SparkReadChains implements Serializable {
 			}
 		}
 		System.out.println("PERFORMING -> "+totList.size()+" comparisons");
-		 JavaPairRDD<Integer, Integer> list = sc
+		 JavaPairRDD<String, Float> list = sc
 				.parallelizePairs(totList, 24)
-				.mapToPair(new GetSequenceId(chainsBc))
-				.filter(new SequenceIdFilter(0.3, chainsBc));// distribute data
+				.mapToPair(new GetSequenceId(chainsBc));
+//				.filter(new SequenceIdFilter(0.3, chainsBc));// distribute data
 //				.filter(new SequenceIdFilter(0.3, chainsBc));
 //				.filter(new LengthDiffFilter(30, chainsBc))
 //				.mapToPair(new AlignmentMapper(chainsBc)); // maps pairs of chain id indices to chain id, TM score pairs
-//		list.saveAsTextFile("out.results");
+		list.saveAsTextFile("out.results");
 		System.out.println(list.count());
 		sc.close();
 		System.out.println("Time: " + (System.nanoTime() - start)/1E9 + " sec.");
