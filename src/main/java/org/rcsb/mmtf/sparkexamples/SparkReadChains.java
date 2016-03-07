@@ -78,7 +78,7 @@ public class SparkReadChains implements Serializable {
 		System.out.println("PERFORMING -> "+totList.size()+" comparisons");
 		 JavaPairRDD<Integer, Integer> list = sc
 				.parallelizePairs(totList, 24) // distribute data
-				.filter(new SequenceIdFilter(0.9, chainsBc));
+				.filter(new SequenceIdFilter(0.7, chainsBc));
 //				.filter(new LengthDiffFilter(30, chainsBc))
 //				.mapToPair(new AlignmentMapper(chainsBc)); // maps pairs of chain id indices to chain id, TM score pairs
 //		list.saveAsTextFile("out.results");
