@@ -9,6 +9,7 @@ import javax.vecmath.Point3d;
 
 import org.apache.spark.api.java.function.PairFunction;
 import org.apache.spark.broadcast.Broadcast;
+import org.rcsb.mmtf.dataholders.CalphaAlignBean;
 
 import scala.Tuple2;
 
@@ -20,21 +21,21 @@ import scala.Tuple2;
  */
 public class AlignmentMapper implements PairFunction<Tuple2<Integer,Integer>,String,Float> {
 	private static final long serialVersionUID = 1L;
-	private Broadcast<List<Tuple2<String, Point3d[]>>> data = null;
+	private List<Tuple2<String, CalphaAlignBean>> data;
 
-	public AlignmentMapper(Broadcast<List<Tuple2<String,Point3d[]>>> data) {
-		this.data = data;
+	public AlignmentMapper(Broadcast<List<Tuple2<String,CalphaAlignBean>>> data) {
+		this.data = data.getValue();
 	}
 
 	/**
 	 * Returns a chainId pair with the TM scores
 	 */
 	public Tuple2<String, Float> call(Tuple2<Integer, Integer> tuple) throws Exception {
-		Tuple2<String,Point3d[]> t1 = this.data.getValue().get(tuple._1);
-		Tuple2<String,Point3d[]> t2 = this.data.getValue().get(tuple._2);
+		Tuple2<String, CalphaAlignBean> t1 = this.data.get(tuple._1);
+		Tuple2<String, CalphaAlignBean> t2 = this.data.get(tuple._2);
 
-		Point3d[] points1 = t1._2;
-		Point3d[] points2 = t2._2;
+		Point3d[] points1 = t1._2.getCoordList();
+		Point3d[] points2 = t2._2.getCoordList();
 		
 		double maxfTm = 0;
 		int minI = 0;

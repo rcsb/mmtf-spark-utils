@@ -16,6 +16,7 @@ import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.broadcast.Broadcast;
 import org.msgpack.jackson.dataformat.MessagePackFactory;
 import org.rcsb.mmtf.dataholders.CalphaAlignBean;
+import org.rcsb.mmtf.filters.LengthFilter;
 import org.rcsb.mmtf.mappers.AlignmentMapper;
 import org.rcsb.mmtf.mappers.ByteWriteToByteArr;
 
@@ -50,21 +51,21 @@ public class SparkReadChains implements Serializable {
 		JavaSparkContext sc = new JavaSparkContext(conf);
 		// Time the proccess
 		long start = System.nanoTime();
-		List<Tuple2<String, Point3d[]>> jprdd = sc
+		List<Tuple2<String, CalphaAlignBean>> jprdd = sc
 				// Read the file
 				.sequenceFile(path, Text.class, BytesWritable.class, 24)
 				// Now get the structure
 				.mapToPair(new ByteWriteToByteArr())
 				.map(t -> new ObjectMapper(new MessagePackFactory()).readValue(t._2, CalphaAlignBean.class))
-				.mapToPair(t -> new Tuple2<String, Point3d[]>(t.getPdbId()+"_"+t.getChainId(), t.getCoordList()))
-				.sample(true, 0.001)
+				.mapToPair(t -> new Tuple2<String, CalphaAlignBean>(t.getPdbId()+"_"+t.getChainId(), t))
+				.filter(new LengthFilter(50, 150))
 				.collect();
 				
 		// Get the total number of chains
 		int nChains = jprdd.size();
 		
 		System.out.println("ANALYSING -> "+nChains+" chains");
-		final Broadcast<List<Tuple2<String,Point3d[]>>> chainsBc = sc.broadcast(jprdd);
+		final Broadcast<List<Tuple2<String,CalphaAlignBean>>> chainsBc = sc.broadcast(jprdd);
 		// Now do the analysis across all these pairs
 		List<Tuple2<Integer, Integer>> totList = new ArrayList<Tuple2<Integer,Integer>>();
 		for(int i =0; i<nChains;i++){
@@ -74,7 +75,7 @@ public class SparkReadChains implements Serializable {
 				}
 			}
 		}
-		
+		System.out.println("PERFORMING -> "+totList.size()+" comparisons");
 		 JavaPairRDD<String, Float> list = sc
 				.parallelizePairs(totList, 24) // distribute data
 				.mapToPair(new AlignmentMapper(chainsBc)); // maps pairs of chain id indices to chain id, TM score pairs
