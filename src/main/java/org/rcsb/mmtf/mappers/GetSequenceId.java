@@ -64,9 +64,11 @@ public class GetSequenceId implements PairFunction<Tuple2<Integer,Integer>,Strin
 		if (ps2.getLength() > length) {
 			length = ps2.getLength();
 		}
-		System.out.println(pair.getAlignedSequences());
-		System.out.println(ps1.toString()+" vs "+ps2.toString()+" -> "+pair.getNumSimilars()+" and "+pair.getNumIdenticals());
-		
+		if(pair.getNumSimilars()>0){
+			System.out.println(pair.getAlignedSequences());
+			System.out.println(ps1.toString()+" vs "+ps2.toString()+" -> "+pair.getNumSimilars()+" and "+pair.getNumIdenticals());
+		}
+
 		return new Tuple2<String, Float>(data.get(inputTuple._1)._1+"__"+data.get(inputTuple._2)._1, (float) (pair.getNumIdenticals()/(double)length));
 	}
 
