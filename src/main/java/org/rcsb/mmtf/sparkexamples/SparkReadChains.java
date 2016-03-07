@@ -54,7 +54,6 @@ public class SparkReadChains implements Serializable {
 		List<Tuple2<String, CalphaAlignBean>> jprdd = sc
 				// Read the file
 				.sequenceFile(path, Text.class, BytesWritable.class, 24)
-				.sample(false, 0.01)
 				// Now get the structure
 				.mapToPair(new ByteWriteToByteArr())
 				.map(t -> new ObjectMapper(new MessagePackFactory()).readValue(t._2, CalphaAlignBean.class))
