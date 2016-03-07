@@ -14,6 +14,7 @@ import org.biojava.nbio.core.alignment.template.SequencePair;
 import org.biojava.nbio.core.alignment.template.SubstitutionMatrix;
 import org.biojava.nbio.core.sequence.ProteinSequence;
 import org.biojava.nbio.core.sequence.compound.AminoAcidCompound;
+import org.biojava.nbio.core.sequence.compound.AminoAcidCompoundSet;
 import org.rcsb.mmtf.dataholders.CalphaAlignBean;
 
 import scala.Tuple2;
@@ -25,6 +26,7 @@ public class GetSequenceId implements PairFunction<Tuple2<Integer,Integer>,Strin
 	private int gop;
 	private int extend;
 	private List<Tuple2<String, CalphaAlignBean>> data;
+	private AminoAcidCompoundSet totalCmpdSet;
 
 	public GetSequenceId(Broadcast<List<Tuple2<String,CalphaAlignBean>>> inputData) {
 		data = inputData.getValue();
@@ -35,6 +37,7 @@ public class GetSequenceId implements PairFunction<Tuple2<Integer,Integer>,Strin
 		extend = 1;
 		penalty.setOpenPenalty(gop);
 		penalty.setExtensionPenalty(extend);
+		totalCmpdSet = AminoAcidCompoundSet.getAminoAcidCompoundSet();
 	}
 	/**
 	 * 
@@ -43,8 +46,8 @@ public class GetSequenceId implements PairFunction<Tuple2<Integer,Integer>,Strin
 
 	@Override
 	public Tuple2<String, Float> call(Tuple2<Integer, Integer> inputTuple) throws Exception {
-		ProteinSequence ps1 = new ProteinSequence(data.get(inputTuple._1)._2.getSequence());
-		ProteinSequence ps2 = new ProteinSequence(data.get(inputTuple._2)._2.getSequence());
+		ProteinSequence ps1 = new ProteinSequence(data.get(inputTuple._1)._2.getSequence(), totalCmpdSet);
+		ProteinSequence ps2 = new ProteinSequence(data.get(inputTuple._2)._2.getSequence(), totalCmpdSet);
 
 		PairwiseSequenceAligner<ProteinSequence, AminoAcidCompound> smithWaterman = Alignments.getPairwiseAligner(ps1, ps2, PairwiseSequenceAlignerType.LOCAL, penalty, matrix);
 		SequencePair<ProteinSequence, AminoAcidCompound> pair = null;
@@ -61,6 +64,7 @@ public class GetSequenceId implements PairFunction<Tuple2<Integer,Integer>,Strin
 		if (ps2.getLength() > length) {
 			length = ps2.getLength();
 		}
+		System.out.println(pair.getAlignedSequences());
 		System.out.println(ps1.toString()+" vs "+ps2.toString()+" -> "+pair.getNumSimilars()+" and "+pair.getNumIdenticals());
 		
 		return new Tuple2<String, Float>(data.get(inputTuple._1)._1+"__"+data.get(inputTuple._2)._1, (float) (pair.getNumIdenticals()/(double)length));
