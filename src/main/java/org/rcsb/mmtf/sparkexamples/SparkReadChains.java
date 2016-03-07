@@ -59,7 +59,7 @@ public class SparkReadChains implements Serializable {
 				.mapToPair(new ByteWriteToByteArr())
 				.map(t -> new ObjectMapper(new MessagePackFactory()).readValue(t._2, CalphaAlignBean.class))
 				.mapToPair(t -> new Tuple2<String, CalphaAlignBean>(t.getPdbId()+"_"+t.getChainId(), t))
-				.filter(new LengthFilter(10, 50))
+				.filter(new LengthFilter(10, 150))
 				.collect();
 				
 		// Get the total number of chains
@@ -79,10 +79,10 @@ public class SparkReadChains implements Serializable {
 		System.out.println("PERFORMING -> "+totList.size()+" comparisons");
 		 JavaPairRDD<String, Float> list = sc
 				.parallelizePairs(totList, 24)
+				.filter(new LengthDiffFilter(30, chainsBc))
+				.filter(new SequenceSimFilter(0.9, chainsBc))// distribute data
 				.mapToPair(new GetSequenceSimilarity(chainsBc));
-//				.filter(new SequenceIdFilter(0.3, chainsBc));// distribute data
 //				.filter(new SequenceIdFilter(0.3, chainsBc));
-//				.filter(new LengthDiffFilter(30, chainsBc))
 //				.mapToPair(new AlignmentMapper(chainsBc)); // maps pairs of chain id indices to chain id, TM score pairs
 		list.saveAsTextFile("out.results");
 		System.out.println(list.count());
