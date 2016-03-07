@@ -6,8 +6,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.vecmath.Point3d;
-
 import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.spark.SparkConf;
@@ -16,7 +14,9 @@ import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.broadcast.Broadcast;
 import org.msgpack.jackson.dataformat.MessagePackFactory;
 import org.rcsb.mmtf.dataholders.CalphaAlignBean;
+import org.rcsb.mmtf.filters.LengthDiffFilter;
 import org.rcsb.mmtf.filters.LengthFilter;
+import org.rcsb.mmtf.filters.SequenceIdFilter;
 import org.rcsb.mmtf.mappers.AlignmentMapper;
 import org.rcsb.mmtf.mappers.ByteWriteToByteArr;
 
@@ -78,6 +78,8 @@ public class SparkReadChains implements Serializable {
 		System.out.println("PERFORMING -> "+totList.size()+" comparisons");
 		 JavaPairRDD<String, Float> list = sc
 				.parallelizePairs(totList, 24) // distribute data
+				.filter(new SequenceIdFilter(0.7, chainsBc))
+				.filter(new LengthDiffFilter(100, chainsBc))
 				.mapToPair(new AlignmentMapper(chainsBc)); // maps pairs of chain id indices to chain id, TM score pairs
 	
 		list.saveAsTextFile("out.results");
