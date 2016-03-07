@@ -58,7 +58,7 @@ public class SparkReadChains implements Serializable {
 				.mapToPair(new ByteWriteToByteArr())
 				.map(t -> new ObjectMapper(new MessagePackFactory()).readValue(t._2, CalphaAlignBean.class))
 				.mapToPair(t -> new Tuple2<String, CalphaAlignBean>(t.getPdbId()+"_"+t.getChainId(), t))
-				.filter(new LengthFilter(0, 20))
+				.filter(new LengthFilter(19, 20))
 				.collect();
 				
 		// Get the total number of chains
