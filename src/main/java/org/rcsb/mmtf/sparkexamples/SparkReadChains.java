@@ -16,9 +16,9 @@ import org.msgpack.jackson.dataformat.MessagePackFactory;
 import org.rcsb.mmtf.dataholders.CalphaAlignBean;
 import org.rcsb.mmtf.filters.LengthDiffFilter;
 import org.rcsb.mmtf.filters.LengthFilter;
-import org.rcsb.mmtf.filters.SequenceIdFilter;
+import org.rcsb.mmtf.filters.SequenceSimFilter;
 import org.rcsb.mmtf.mappers.ByteWriteToByteArr;
-import org.rcsb.mmtf.mappers.GetSequenceId;
+import org.rcsb.mmtf.mappers.GetSequenceSimilarity;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -79,7 +79,7 @@ public class SparkReadChains implements Serializable {
 		System.out.println("PERFORMING -> "+totList.size()+" comparisons");
 		 JavaPairRDD<String, Float> list = sc
 				.parallelizePairs(totList, 24)
-				.mapToPair(new GetSequenceId(chainsBc));
+				.mapToPair(new GetSequenceSimilarity(chainsBc));
 //				.filter(new SequenceIdFilter(0.3, chainsBc));// distribute data
 //				.filter(new SequenceIdFilter(0.3, chainsBc));
 //				.filter(new LengthDiffFilter(30, chainsBc))
