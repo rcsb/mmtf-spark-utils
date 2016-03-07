@@ -61,7 +61,7 @@ public class SequenceIdFilter implements Function<Tuple2<Integer, Integer>, Bool
 			System.out.println("ALIGNMENT FAILED");
 			return false;
 		}
-
+		// Get the length - as the longest portion
 		int length = ps1.getLength();
 		if (ps2.getLength() > length) {
 			length = ps2.getLength();
