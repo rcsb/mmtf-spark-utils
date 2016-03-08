@@ -16,7 +16,6 @@ import org.msgpack.jackson.dataformat.MessagePackFactory;
 import org.rcsb.mmtf.dataholders.CalphaAlignBean;
 import org.rcsb.mmtf.filters.LengthDiffFilter;
 import org.rcsb.mmtf.filters.LengthFilter;
-import org.rcsb.mmtf.filters.SequenceSimFilter;
 import org.rcsb.mmtf.mappers.ByteWriteToByteArr;
 import org.rcsb.mmtf.mappers.GetSequenceSimilarity;
 
@@ -58,7 +57,7 @@ public class SparkReadChains implements Serializable {
 				.mapToPair(new ByteWriteToByteArr())
 				.map(t -> new ObjectMapper(new MessagePackFactory()).readValue(t._2, CalphaAlignBean.class))
 				.mapToPair(t -> new Tuple2<String, CalphaAlignBean>(t.getPdbId()+"_"+t.getChainId(), t))
-				.filter(new LengthFilter(10, 150))
+				.filter(new LengthFilter(10, 20))
 				.collect();
 				
 		// Get the total number of chains
