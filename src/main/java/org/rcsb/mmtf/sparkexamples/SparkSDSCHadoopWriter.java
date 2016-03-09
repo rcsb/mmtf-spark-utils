@@ -53,7 +53,6 @@ public class SparkSDSCHadoopWriter {
 		ChemCompGroupFactory.setChemCompProvider(dcc);
 		dcc.checkDoFirstInstall();
 		dcc.setDownloadAll(true);
-		params.setLoadChemCompInfo(true);
 		params.setUseInternalChainId(true);
 		cache.setFileParsingParams(params);
 		StructureIO.setAtomCache(cache);

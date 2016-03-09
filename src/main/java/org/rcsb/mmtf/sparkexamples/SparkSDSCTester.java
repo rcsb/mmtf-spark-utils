@@ -50,7 +50,6 @@ public class SparkSDSCTester {
 		DownloadChemCompProvider dcc = new DownloadChemCompProvider();
 		ChemCompGroupFactory.setChemCompProvider(dcc);
 		dcc.checkDoFirstInstall();
-		params.setLoadChemCompInfo(true);
 		cache.setFileParsingParams(params);
 		StructureIO.setAtomCache(cache);
 

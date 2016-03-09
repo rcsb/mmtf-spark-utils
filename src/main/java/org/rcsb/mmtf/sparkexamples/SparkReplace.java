@@ -83,7 +83,6 @@ public class SparkReplace {
 		DownloadChemCompProvider dcc = new DownloadChemCompProvider();
 		ChemCompGroupFactory.setChemCompProvider(dcc);
 		dcc.checkDoFirstInstall();
-		params.setLoadChemCompInfo(true);
 		cache.setFileParsingParams(params);
 		StructureIO.setAtomCache(cache);
 		// Get all the PDB IDs

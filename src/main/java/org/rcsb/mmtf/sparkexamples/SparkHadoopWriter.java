@@ -44,7 +44,6 @@ public class SparkHadoopWriter {
 		cache.setUseMmCif(true);
 		cache.setFetchBehavior(FetchBehavior.FETCH_FILES);
 		FileParsingParameters params = cache.getFileParsingParams();
-		params.setLoadChemCompInfo(true);
 		params.setCreateAtomBonds(true);
 		params.setAlignSeqRes(true);
 		params.setParseBioAssembly(true);
