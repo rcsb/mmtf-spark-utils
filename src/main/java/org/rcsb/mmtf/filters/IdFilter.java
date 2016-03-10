@@ -4,10 +4,7 @@ import org.apache.spark.api.java.function.Function;
 
 public class IdFilter implements Function<String, Boolean> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 5073087267135515186L;
 
 	@Override
 	public Boolean call(String v1) throws Exception {

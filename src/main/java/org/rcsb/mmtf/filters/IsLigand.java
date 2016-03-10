@@ -7,14 +7,12 @@ import org.biojava.nbio.structure.Group;
 import scala.Tuple2;
 
 /**
- * Filter to check if BioJava group is a ligand
- * @author abradley
+ * Filter to check if BioJava group is a ligand.
+ * @author Anthony Bradley
  *
  */
 public class IsLigand implements Function<Tuple2<String, Group>, Boolean> {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = -5486322301757092895L;
 
 	@Override

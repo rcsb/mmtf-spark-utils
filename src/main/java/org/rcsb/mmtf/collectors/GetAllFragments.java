@@ -14,14 +14,11 @@ import scala.Tuple2;
 
 /**
  * 
- * @author anthony
+ * @author Anthony Bradley
  *Class to get all Fragments of a structure
  */
 public class GetAllFragments implements PairFlatMapFunction<Tuple2<String,Structure>, String, Group>{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 36604498761700117L;
 	int fragSize = 9;
 

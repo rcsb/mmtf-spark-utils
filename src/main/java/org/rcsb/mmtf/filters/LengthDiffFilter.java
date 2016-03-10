@@ -11,20 +11,15 @@ import scala.Tuple2;
 public class LengthDiffFilter implements Function<Tuple2<Integer, Integer>, Boolean> {
 
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 5020491570385859408L;
 
 
 	private List<Tuple2<String, CalphaAlignBean>> data;
 	private int maxDiff;
 
-
-	public LengthDiffFilter(int inputMaxDiff, Broadcast<List<Tuple2<String,CalphaAlignBean>>> chainsBc){
+	public LengthDiffFilter(int inputMaxDiff, Broadcast<List<Tuple2<String,CalphaAlignBean>>> chainsBc) {
 		data = chainsBc.getValue();
 		maxDiff = inputMaxDiff;
-
 	}
 
 	@Override

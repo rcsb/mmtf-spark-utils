@@ -10,34 +10,30 @@ import scala.Tuple2;
 
 /**
  * 
- * @author anthony
+ * @author Anthony Bradley
  * Class to count the number of Atoms in the PDB
  */
 public class CountAtoms implements  PairFunction<Tuple2<String, Structure>, String, Integer> {
-	
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 2788962017828944159L;
 
 	private Integer getAtoms(Structure input){
-		// Get the number of atoms in the strucutre
+		// Get the number of atoms in the structure
 		int outAns = 0;
 		try{
-		for (Chain c: input.getChains()){
-			for(Group g: c.getAtomGroups()){
-				outAns+=g.getAtoms().size();
+			for (Chain c: input.getChains()){
+				for(Group g: c.getAtomGroups()){
+					outAns+=g.getAtoms().size();
+				}
 			}
-
-		}
-		return outAns;
+			return outAns;
 		}
 		catch(IndexOutOfBoundsException e){
 			return 0;
 		}
-		
+
 	}
-	
+
 	@Override
 	public Tuple2<String, Integer> call(Tuple2<String, Structure> t) throws Exception {
 		Tuple2<String, Integer> outAns = new Tuple2<String, Integer>(t._1, getAtoms(t._2));

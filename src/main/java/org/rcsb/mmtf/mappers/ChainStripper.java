@@ -36,6 +36,9 @@ public class ChainStripper implements PairFlatMapFunction<Tuple2<String,DecodeSt
 	private List<Point3d> thesePoints;
 	private static final long serialVersionUID = -8516822489889006992L;
 
+	private MapperUtils mapperUtils = new MapperUtils();
+
+	
 	@Override
 	public Iterable<Tuple2<String, CalphaAlignBean>> call(Tuple2<String, DecodeStructure> t) throws Exception {
 		// Loop through the data structure and output a new one - on a per chain level

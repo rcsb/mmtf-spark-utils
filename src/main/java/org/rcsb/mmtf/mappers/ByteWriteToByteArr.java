@@ -8,7 +8,7 @@ import scala.Tuple2;
 
 /**
  * Maps the input of a Hadoop sequence file (Text/Bytes Writeable) to a String, byte[]
- * @author abradley
+ * @author Anthony Bradley
  *
  */
 public class ByteWriteToByteArr implements PairFunction<Tuple2<Text, BytesWritable>,String, byte[]> {
@@ -21,7 +21,7 @@ public class ByteWriteToByteArr implements PairFunction<Tuple2<Text, BytesWritab
 
 	@Override
 	public Tuple2<String, byte[]> call(Tuple2<Text, BytesWritable> t) throws Exception {
-		// TODO Auto-generated method stub
+		// Simply return the byte array
 		return new Tuple2<String, byte[]>(t._1.toString(), t._2.copyBytes());
 	}
 
