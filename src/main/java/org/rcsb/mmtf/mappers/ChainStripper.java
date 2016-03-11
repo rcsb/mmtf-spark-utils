@@ -36,7 +36,6 @@ public class ChainStripper implements PairFlatMapFunction<Tuple2<String,DecodeSt
 	private List<Point3d> thesePoints;
 	private static final long serialVersionUID = -8516822489889006992L;
 
-	private MapperUtils mapperUtils = new MapperUtils();
 
 	
 	@Override

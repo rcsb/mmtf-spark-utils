@@ -8,7 +8,6 @@ import java.util.SortedSet;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.api.java.function.Function2;
 import org.biojava.nbio.structure.rcsb.GetRepresentatives;
 import org.rcsb.mmtf.filters.IdFilter;
 import org.rcsb.mmtf.mappers.PdbIdToBioJavaStruct;
@@ -45,19 +44,6 @@ public class BasicExample {
 		long min = distData.min(Comparator.naturalOrder());
 		long max= distData.max(Comparator.naturalOrder());
 		long total = distData.reduce((a,b) -> a + b);
-		long res= distData.reduce(new Function2<Integer, Integer, Integer>() {
-			
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public Integer call(Integer v1, Integer v2) throws Exception {
-				// TODO Auto-generated method stub
-				return v1/v2;
-			}
-		});
 		System.out.println("MIN: "+min +" MAX: "+ max +" TOTAL: "+ total);
 		//
 		sc.stop();
