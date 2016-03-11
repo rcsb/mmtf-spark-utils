@@ -74,6 +74,7 @@ public class SparkSDSCTester {
 							cbs.createFromJavaStruct(v1, totMap);
 						}
 						catch(Exception e){
+							e.printStackTrace();
 							// Just return the object
 							return true;
 						}

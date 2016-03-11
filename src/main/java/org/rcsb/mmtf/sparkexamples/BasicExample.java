@@ -34,11 +34,11 @@ public class BasicExample {
 		// Now read this list in
 		JavaRDD<Integer> distData =
 				sc.parallelize(pdbCodeList)
+				.sample(true, 0.0001)
 				.filter(new IdFilter())
 				.mapToPair(new PdbIdToBioJavaStruct())
 				.flatMapToPair(new StructToChains())
 				.map(t -> t._2.getAtomLigands().size())
-				.sample(true, 0.0001)
 				.cache();
 
 
@@ -58,8 +58,9 @@ public class BasicExample {
 				return v1/v2;
 			}
 		});
-		System.out.println("MIN: "+min +" MAX: "+ max +" TOTAL: "+ total +" BULL: "+res);
+		System.out.println("MIN: "+min +" MAX: "+ max +" TOTAL: "+ total);
 		//
+		sc.stop();
 		sc.close();
 	}
 }

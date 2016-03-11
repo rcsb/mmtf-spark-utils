@@ -39,7 +39,7 @@ public class SparkHadoopWriter {
 
 		// A hack to make sure we're not downloading the whole pdb
 		Properties sysProps = System.getProperties();
-		sysProps.setProperty("PDB_DIR", "/Users/anthony/PDB_CACHE");
+		sysProps.setProperty("PDB_DIR", "/Users/abradley/PDB_CACHE");
 		AtomCache cache = new AtomCache();
 		cache.setUseMmCif(true);
 		cache.setFetchBehavior(FetchBehavior.FETCH_FILES);
