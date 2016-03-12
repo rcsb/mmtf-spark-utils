@@ -1,7 +1,8 @@
 package org.rcsb.mmtf.sparkexamples;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 import java.util.SortedSet;
@@ -66,7 +67,8 @@ public class SparkSDSCHadoopWriter {
 				.flatMapToPair(new CBSToBytes())
 				.mapToPair(new StringByteToTextByteWriter());
 		// Now save this as a Hadoop sequence file
-		String uri = "Total.hadoop.latest.bzip2";		
+		String timeStamp = new SimpleDateFormat("yyyyMMddhhmm'.txt'").format(new Date());
+		String uri = "Total.hadoop.latest.bzip2"+timeStamp;		
 		distData.saveAsHadoopFile(uri, Text.class, BytesWritable.class, SequenceFileOutputFormat.class, org.apache.hadoop.io.compress.BZip2Codec.class);
 		sc.close();
 	}

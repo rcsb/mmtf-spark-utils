@@ -45,7 +45,7 @@ public class BasicExample {
 		long max= distData.max(Comparator.naturalOrder());
 		long total = distData.reduce((a,b) -> a + b);
 		System.out.println("MIN: "+min +" MAX: "+ max +" TOTAL: "+ total);
-		//
+		// 
 		sc.stop();
 		sc.close();
 	}
