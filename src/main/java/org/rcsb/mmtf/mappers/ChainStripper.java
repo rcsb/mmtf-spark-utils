@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.vecmath.Point3d;
 
 import org.apache.spark.api.java.function.PairFlatMapFunction;
+import org.rcsb.mmtf.api.DataApiInterface;
 import org.rcsb.mmtf.dataholders.CalphaAlignBean;
 import org.rcsb.mmtf.dataholders.PDBGroup;
 import org.rcsb.mmtf.decoder.DecodeStructure;
@@ -18,7 +19,7 @@ import scala.Tuple2;
  * @author Anthony Bradley
  *
  */
-public class ChainStripper implements PairFlatMapFunction<Tuple2<String,DecodeStructure>, String, CalphaAlignBean>{
+public class ChainStripper implements PairFlatMapFunction<Tuple2<String,DataApiInterface>, String, CalphaAlignBean>{
 
 	private int groupCounter;
 	private int atomCounter;
@@ -39,11 +40,11 @@ public class ChainStripper implements PairFlatMapFunction<Tuple2<String,DecodeSt
 
 	
 	@Override
-	public Iterable<Tuple2<String, CalphaAlignBean>> call(Tuple2<String, DecodeStructure> t) throws Exception {
+	public Iterable<Tuple2<String, CalphaAlignBean>> call(Tuple2<String,DataApiInterface> t) throws Exception {
 		// Loop through the data structure and output a new one - on a per chain level
 		// The out array to produce
 		List<Tuple2<String, CalphaAlignBean>> outArr = new ArrayList<Tuple2<String, CalphaAlignBean>>();
-		DecodeStructure decodeStructure= t._2;
+		DataApiInterface decodeStructure= t._2;
 		// Get the coordinates
 		cartnX =  decodeStructure.getCartnX();
 		cartnY = decodeStructure.getCartnY();
