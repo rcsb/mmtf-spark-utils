@@ -10,7 +10,6 @@ import org.apache.spark.api.java.function.PairFlatMapFunction;
 import org.rcsb.mmtf.api.DataApiInterface;
 import org.rcsb.mmtf.dataholders.CalphaAlignBean;
 import org.rcsb.mmtf.dataholders.PDBGroup;
-import org.rcsb.mmtf.decoder.DecodeStructure;
 
 import scala.Tuple2;
 
