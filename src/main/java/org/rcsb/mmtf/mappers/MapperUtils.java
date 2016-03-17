@@ -1,8 +1,6 @@
 package org.rcsb.mmtf.mappers;
 
-import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.hadoop.io.BytesWritable;
@@ -13,14 +11,8 @@ import org.biojava.nbio.structure.Structure;
 import org.biojava.nbio.structure.StructureImpl;
 import org.biojava.nbio.structure.io.mmtf.BioJavaStructureDecoder;
 import org.rcsb.mmtf.biojavaencoder.EncoderUtils;
-import org.rcsb.mmtf.biojavaencoder.ParseFromBiojava;
-import org.rcsb.mmtf.dataholders.BioDataStruct;
-import org.rcsb.mmtf.dataholders.CalphaDistBean;
-import org.rcsb.mmtf.dataholders.HeaderBean;
 import org.rcsb.mmtf.decoder.DecodeStructure;
 import org.rcsb.mmtf.decoder.ParsingParams;
-
-import scala.Tuple2;
 
 
 /**

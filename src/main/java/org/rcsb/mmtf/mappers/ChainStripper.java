@@ -50,7 +50,7 @@ public class ChainStripper implements PairFlatMapFunction<Tuple2<String,DataApiI
 		cartnY = decodeStructure.getCartnY();
 		cartnZ = decodeStructure.getCartnZ();
 		groupMap = decodeStructure.getGroupMap();
-		chainList = decodeStructure.getInternalChainIds();
+		chainList = decodeStructure.getChainList();
 		// Loop through the chains
 		groupCounter = 0;
 		atomCounter = 0;
