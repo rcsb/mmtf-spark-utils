@@ -56,36 +56,6 @@ public class MapperUtils implements Serializable{
 		}
 		return newStruct;
 	}
-
-	/**
-	 * 
-	 * @param pdbCode
-	 * @param parseFromBiojava
-	 * @return
-	 * @throws IOException 
-	 */
-	public List<Tuple2<String, byte[]>> getAllDataTypes(String pdbCode, ParseFromBiojava parseFromBiojava) throws IOException {
-		
-		// First generate the list to return
-		List<Tuple2<String, byte[]>> outList = new ArrayList<Tuple2<String, byte[]>>();
-		EncoderUtils cm = new EncoderUtils();
-		ParseFromBiojava cbs = parseFromBiojava;
-		// Now get the header too
-		HeaderBean headerData = cbs.getHeaderStruct();
-		BioDataStruct thisBS = cbs.getBioStruct();
-		CalphaDistBean calphaDistStruct = cm.compCAlpha(cbs.getCalphaStruct(), cbs.getHeaderStruct());
-		// NOW JUST WRITE THE KEY VALUE PAIRS HERE
-		byte[] totBytes = cm.getMessagePack(cm.compressMainData(thisBS, headerData));
-		byte[] headerBytes = cm.getMessagePack(headerData);
-		byte[] calphaBytes = cm.getMessagePack(calphaDistStruct);
-		// Add the total data
-		outList.add(new Tuple2<String, byte[]>(pdbCode+"_total", totBytes));
-		// Add the header
-		outList.add(new Tuple2<String, byte[]>(pdbCode+"_header", headerBytes));
-		// Add the calpha
-		outList.add(new Tuple2<String, byte[]>(pdbCode+"_calpha", calphaBytes));
-		return outList;
-	}
 	
 	/**
 	 * PDB RDD gnerateor. Converts a list of pdb ids to a writeable RDD
